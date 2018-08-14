@@ -19,8 +19,6 @@ import optparse
 # for parsing XML
 # import xml.etree.ElementTree as ET
 
-
-
 def optionsSet():
 	optParser = optparse.OptionParser()
 	optParser.add_option("-p", "--ScriptPrefix",
@@ -136,7 +134,7 @@ if __name__ == "__main__":
 	# arrival rate: 1, 10, 20, 30, 40, 50
 	arrivalRate = 60
 
-	fileName = str(prefix)+'-'+str(name)+'-'+str(CTRMode)
+	fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(CTRMode)
 
 	fullFileName = os.path.join(savePath, fileName)
 
@@ -161,7 +159,8 @@ if __name__ == "__main__":
 			print('-e '+str(simEndTime), file=f, end=" ")
 			print('-s '+str(s), file=f, end=" ")
 			print('--arrivalRate '+str(a), file=f, end=" ")
-			print('--CTRMode '+str(CTRMode), file=f)
+			print('--CTRMode '+str(CTRMode), file=f, end=" ")
+			print('-m '+str(mode), file=f)
 			f.close()
 
 			# create total submission script
