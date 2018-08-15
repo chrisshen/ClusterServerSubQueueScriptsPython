@@ -9,6 +9,8 @@ import optparse
 # import subprocess
 # import random
 # import time
+import numpy as np 
+import matplotlib.pyplot as plt
 
 # pretty printer
 import pprint
@@ -91,6 +93,16 @@ def collectData(directory):
 	pprint.pprint(dicMeanE2EDelay)
 	pprint.pprint(dicThroughput)
 
+	dataList = [item for sublist in dicMeanE2EDelay.values() for item in sublist]
+
+	print(dataList)
+
+	num_bins = 20
+	counts, bins = np.histogram(dataList, bins=num_bins, normed=True)
+	cdf = np.cumsum(counts)
+	print(counts, bins, cdf)
+	plt.plot(bins[1:], cdf/cdf[-1])
+	plt.show()
 
 # this is the main entry point of this script
 if __name__ == "__main__":
