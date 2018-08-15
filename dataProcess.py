@@ -10,6 +10,9 @@ import optparse
 # import random
 # import time
 
+# pretty printer
+import pprint
+
 # for debuging
 # import logging
 
@@ -31,7 +34,7 @@ def optionsSet():
 	optParser.add_option("-d", "--Directory",
 							type=str,
 							dest="directory",
-							default="CTR",
+							default="/home/chris/usr/CTR_TVT/ESTN/sim/result/test",
 							help="Directory to scan")
 
 	# simulation mode option
@@ -62,18 +65,43 @@ def optionsSet():
 	options, args = optParser.parse_args()
 	return options
 
-# this is the main entry point of this script
-if __name__ == "__main__":
-	options = optionsSet()
-	directory = options.directory
-	
-	if directory[len(directory)-1] != '/':
-		directory = directory + '/'
-
+def collectData(directory):
 	for root, dirs, files in os.walk(directory):
 		# print(root, files)
 		for filename in files:
 			with open(root+filename, 'r') as f:
 				data = json.load(f)
-				if data["arrivalRate"] == 50:
-					print(data["arrivalRate"], data["meanE2EDelay"])
+				# E2E delay
+				key_ar = data["arrivalRate"]
+				valEle_e2e = data["meanE2EDelay"]
+				if dicMeanE2EDelay.has_key(key_ar):
+					dicMeanE2EDelay[key_ar].append(valEle_e2e)
+				else:
+					dicMeanE2EDelay[key_ar]=[valEle_e2e]
+
+				# Throughput
+				key_ar = data["arrivalRate"]
+				valEle_thr = data["throughput"]
+				if dicThroughput.has_key(key_ar):
+					dicThroughput[key_ar].append(valEle_thr)
+				else:
+					dicThroughput[key_ar]=[valEle_thr]				
+	
+	pprint.pprint(dicMeanE2EDelay)
+	pprint.pprint(dicThroughput)
+
+
+# this is the main entry point of this script
+if __name__ == "__main__":
+	options = optionsSet()
+	directory = options.directory
+
+	global dicMeanE2EDelay
+	dicMeanE2EDelay = {}
+	global dicThroughput
+	dicThroughput = {}
+
+	if directory[len(directory)-1] != '/':
+		directory = directory + '/'
+
+	collectData(directory)
