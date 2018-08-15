@@ -71,6 +71,7 @@ def collectData(directory):
 		for filename in files:
 			with open(root+filename, 'r') as f:
 				data = json.load(f)
+				
 				# E2E delay
 				key_ar = data["arrivalRate"]
 				valEle_e2e = data["meanE2EDelay"]
