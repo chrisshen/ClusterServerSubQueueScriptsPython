@@ -1,4 +1,19 @@
 #!/home/chris/anaconda2/bin/python2.7
+#
+# Data collection and processing.
+# Main tasks:
+# 1. scan target directory to get file name
+# 2. read each json file
+# 3. save data to dictionary
+# 4. calculate statistic, e.g. mean, variance, confidence intervals, CDF
+# 5. save data to file for GNU Plot or matplot
+# 
+# 
+# @file    dataProcess.py
+# @author  Chris Shen
+# @date    2018-08-15
+# @version $Id$
+
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
@@ -67,6 +82,23 @@ def optionsSet():
 	options, args = optParser.parse_args()
 	return options
 
+def cdfMaking(dataList):
+	num_bins = 20
+	counts, bins = np.histogram(dataList, bins=num_bins, normed=True)
+	cdf = np.cumsum(counts)
+	print(counts, bins, cdf)
+	plt.plot(bins[1:], cdf/cdf[-1])
+	plt.show()	
+
+
+def saveData(xAxis, yAxis, targetDic):
+	key_ar = xAxis
+	valEle_e2e = yAxis
+	if targetDic.has_key(key_ar):
+		targetDic[key_ar].append(valEle_e2e)
+	else:
+		targetDic[key_ar]=[valEle_e2e]
+
 def collectData(directory):
 	for root, dirs, files in os.walk(directory):
 		# print(root, files)
@@ -74,22 +106,14 @@ def collectData(directory):
 			with open(root+filename, 'r') as f:
 				data = json.load(f)
 				
-				# E2E delay
-				key_ar = data["arrivalRate"]
-				valEle_e2e = data["meanE2EDelay"]
-				if dicMeanE2EDelay.has_key(key_ar):
-					dicMeanE2EDelay[key_ar].append(valEle_e2e)
-				else:
-					dicMeanE2EDelay[key_ar]=[valEle_e2e]
+				saveData(data["arrivalRate"], 
+							data["meanE2EDelay"], 
+							dicMeanE2EDelay)
 
-				# Throughput
-				key_ar = data["arrivalRate"]
-				valEle_thr = data["throughput"]
-				if dicThroughput.has_key(key_ar):
-					dicThroughput[key_ar].append(valEle_thr)
-				else:
-					dicThroughput[key_ar]=[valEle_thr]				
-	
+				saveData(data["arrivalRate"], 
+							data["throughput"], 
+							dicThroughput)
+
 	pprint.pprint(dicMeanE2EDelay)
 	pprint.pprint(dicThroughput)
 
@@ -97,12 +121,6 @@ def collectData(directory):
 
 	print(dataList)
 
-	num_bins = 20
-	counts, bins = np.histogram(dataList, bins=num_bins, normed=True)
-	cdf = np.cumsum(counts)
-	print(counts, bins, cdf)
-	plt.plot(bins[1:], cdf/cdf[-1])
-	plt.show()
 
 # this is the main entry point of this script
 if __name__ == "__main__":
