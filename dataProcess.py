@@ -49,10 +49,11 @@ def optionsSet():
 							)
 
 	optParser.add_option("-d", "--Directory",
-							type=str,
-							dest="directory",
-							default="/home/chris/usr/CTR_TVT/ESTN/sim/result/test",
-							help="Directory to scan")
+						type=str,
+						dest="directory",
+						default="/home/chris/usr/CTR_TVT/ESTN/sim/result",
+						help="Directory to scan"
+						)
 
 	# simulation mode option
 	optParser.add_option("-m",
@@ -60,14 +61,16 @@ def optionsSet():
 						dest="mode",
 						default=3,
 						metavar="NUM",
-						help="mode for simulation [default: %default] [0:Dijkstra, 1:CTR, 2:SAINT, 3:SAINT+CTR, 4:Actuated, 5:SAINT+Actuated, 6:Dijkstra+CTR, 7:Dijkstra+Actuated]")
+						help="mode for simulation [default: %default] [0:Dijkstra, 1:CTR, 2:SAINT, 3:SAINT+CTR, 4:Actuated, 5:SAINT+Actuated, 6:Dijkstra+CTR, 7:Dijkstra+Actuated]"
+						)
 
 	optParser.add_option("-l", 
 						type="float",
 						dest="maxSpeed",
 						default=22.22,
 						metavar="NUM",
-						help="max. speed limit of vehicles (unit : m/s), 80km/h = 22.22m/s [default: %default]")
+						help="max. speed limit of vehicles (unit : m/s), 80km/h = 22.22m/s [default: %default]"
+						)
 
 	# CTR mode
 	# 0: compatible mode, compatible lanes pass
@@ -77,7 +80,8 @@ def optionsSet():
 	optParser.add_option("--CTRMode",
 						dest="CTRMode",
 						type="int",
-						default=2)
+						default=2
+						)
 
 	options, args = optParser.parse_args()
 	return options
@@ -91,35 +95,188 @@ def cdfMaking(dataList):
 	plt.show()	
 
 
-def saveData(xAxis, yAxis, targetDic):
-	key_ar = xAxis
-	valEle_e2e = yAxis
-	if targetDic.has_key(key_ar):
-		targetDic[key_ar].append(valEle_e2e)
+def saveData(xAxis, yAxisDataPoint, targetDic):
+	key = xAxis
+	valEle = yAxisDataPoint
+	if targetDic.has_key(key):
+		targetDic[key].append(valEle)
 	else:
-		targetDic[key_ar]=[valEle_e2e]
+		targetDic[key]=[valEle]
+
+# def meanCompute(targetDic, retDic):
+
 
 def collectData(directory):
+	# scan the directory to read every data 
 	for root, dirs, files in os.walk(directory):
-		# print(root, files)
+		print(root, files)
 		for filename in files:
 			with open(root+filename, 'r') as f:
 				data = json.load(f)
 				
-				saveData(data["arrivalRate"], 
-							data["meanE2EDelay"], 
-							dicMeanE2EDelay)
+				mode = data["mode"]
+				CTRMode = data["CTRMode"]
+				if mode == 3:
+					if CTRMode == 0:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
 
-				saveData(data["arrivalRate"], 
-							data["throughput"], 
-							dicThroughput)
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
 
-	pprint.pprint(dicMeanE2EDelay)
-	pprint.pprint(dicThroughput)
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M3CTR0[key] \
+								= sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M3CTR0[key] = sum(valList)/len(valList)
 
-	dataList = [item for sublist in dicMeanE2EDelay.values() for item in sublist]
+					elif CTRMode == 1:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
 
-	print(dataList)
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
+
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M3CTR1[key] = sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M3CTR1[key] = sum(valList)/len(valList)
+
+					elif CTRMode == 2:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
+
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
+
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M3CTR2[key] = sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M3CTR2[key] = sum(valList)/len(valList)
+
+					elif CTRMode == 3:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
+
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
+
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M3CTR3[key] = sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M3CTR3[key] = sum(valList)/len(valList)
+
+				elif mode == 6:
+					if CTRMode == 0:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
+
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
+
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M6CTR0[key] = sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M6CTR0[key] = sum(valList)/len(valList)
+
+					elif CTRMode == 1:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
+
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
+
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M6CTR1[key] = sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M6CTR1[key] = sum(valList)/len(valList)
+
+					elif CTRMode == 2:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
+
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
+
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M6CTR2[key] = sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M6CTR2[key] = sum(valList)/len(valList)
+
+					elif CTRMode == 3:
+						dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								dicE2EDelayRaw)
+
+						dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								dicThroughputRaw)
+
+						for key, valList in dicE2EDelayRaw.viewitems():
+							g_dicMeanE2E_M6CTR3[key] = sum(valList)/len(valList)
+						for key, valList in dicThroughputRaw.viewitems():
+							g_dicThro_M6CTR3[key] = sum(valList)/len(valList)
+
+
+
+	print("M3CTR0")
+	pprint.pprint(g_dicMeanE2E_M3CTR0)
+	pprint.pprint(g_dicThro_M3CTR0)
+	print("M3CTR1")
+	pprint.pprint(g_dicMeanE2E_M3CTR1)
+	pprint.pprint(g_dicThro_M3CTR1)
+	print("M3CTR2")
+	pprint.pprint(g_dicMeanE2E_M3CTR2)
+	pprint.pprint(g_dicThro_M3CTR2)
+	print("M3CTR3")
+	pprint.pprint(g_dicMeanE2E_M3CTR3)
+	pprint.pprint(g_dicThro_M3CTR3)
+	print("M6CTR0")
+	pprint.pprint(g_dicMeanE2E_M6CTR0)
+	pprint.pprint(g_dicThro_M6CTR0)
+	print("M6CTR1")
+	pprint.pprint(g_dicMeanE2E_M6CTR1)
+	pprint.pprint(g_dicThro_M6CTR1)	
+	print("M6CTR2")
+	pprint.pprint(g_dicMeanE2E_M6CTR2)
+	pprint.pprint(g_dicThro_M6CTR2)	
+	print("M6CTR3")
+	pprint.pprint(g_dicMeanE2E_M6CTR3)
+	pprint.pprint(g_dicThro_M6CTR3)
+
+	# dataList = [item for sublist in dicMeanE2EDelayRaw.values() for item in sublist]
+
+	# print(dataList)
 
 
 # this is the main entry point of this script
@@ -127,12 +284,44 @@ if __name__ == "__main__":
 	options = optionsSet()
 	directory = options.directory
 
-	global dicMeanE2EDelay
-	dicMeanE2EDelay = {}
-	global dicThroughput
-	dicThroughput = {}
+	global g_dicMeanE2E_M3CTR0
+	g_dicMeanE2E_M3CTR0 = {}
+	global g_dicMeanE2E_M3CTR1
+	g_dicMeanE2E_M3CTR1 = {}
+	global g_dicMeanE2E_M3CTR2
+	g_dicMeanE2E_M3CTR2 = {}
+	global g_dicMeanE2E_M3CTR3
+	g_dicMeanE2E_M3CTR3 = {}
+
+	global g_dicMeanE2E_M6CTR0
+	g_dicMeanE2E_M6CTR0 = {}
+	global g_dicMeanE2E_M6CTR1
+	g_dicMeanE2E_M6CTR1 = {}
+	global g_dicMeanE2E_M6CTR2
+	g_dicMeanE2E_M6CTR2 = {}
+	global g_dicMeanE2E_M6CTR3
+	g_dicMeanE2E_M6CTR3 = {}
+
+	global g_dicThro_M3CTR0
+	g_dicThro_M3CTR0 = {}
+	global g_dicThro_M3CTR1
+	g_dicThro_M3CTR1 = {}
+	global g_dicThro_M3CTR2
+	g_dicThro_M3CTR2 = {}
+	global g_dicThro_M3CTR3
+	g_dicThro_M3CTR3 = {}
+
+	global g_dicThro_M6CTR0
+	g_dicThro_M6CTR0 = {}
+	global g_dicThro_M6CTR1
+	g_dicThro_M6CTR1 = {}
+	global g_dicThro_M6CTR2
+	g_dicThro_M6CTR2 = {}
+	global g_dicThro_M6CTR3
+	g_dicThro_M6CTR3 = {}
 
 	if directory[len(directory)-1] != '/':
 		directory = directory + '/'
 
+	print(directory)
 	collectData(directory)
