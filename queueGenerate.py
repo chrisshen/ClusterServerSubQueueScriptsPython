@@ -1,4 +1,9 @@
 #!/home/chris/anaconda2/bin/python2.7
+# @file    queueGenerate.py
+# @author  Chris Shen
+# @date    2018-08-15
+# @version 1.0
+
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import division
