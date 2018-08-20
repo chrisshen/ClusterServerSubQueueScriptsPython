@@ -127,21 +127,29 @@ def saveData(xAxis, yAxisDataPoint, targetDic):
 		targetDic[key]=[valEle]
 
 def meanCompute(inputDic, retDic):
+	''' Compute mean, return to retDic with list value
+
+	args:
+		inputDic (dict): raw data
+		retDic (dict): return mean
+	return:
+
+	'''	
 	for key, valList in inputDic.viewitems():
-		retDic[key] = sum(valList)/len(valList)
+		retDic[key] = [sum(valList)/len(valList)]
 
 def variCompute(inDic, inDicMean, retDic):
 	''' Compute variance, return to retDic
 
 	args:
-		inDic (dict):
-		inDicMean (dict):
-		retDic (dict):
+		inDic (dict): raw data
+		inDicMean (dict): mean data
+		retDic (dict): return variance
 	'''
 	for key, valList in inDic.viewitems():
 		sum_var = 0.0
 		for value in valList:
-			sum_var = sum_var + pow(value-inDicMean[key], 2)
+			sum_var = sum_var + pow(value-inDicMean.get(key)[0], 2)
 
 		vari = sum_var / (len(valList)-1)
 
@@ -151,9 +159,9 @@ def confCompute(inDic, inVari, retDic):
 	''' Compute confidence interval, return to retDic
 
 	args:
-		inDic (dict):
-		inVari (dict):
-		retDic (dict):
+		inDic (dict): raw input data
+		inVari (dict): input variance data
+		retDic (dict): return confience interval data
 	'''	
 	for key, val in inVari.viewitems():
 		# student t dis., T(10-1, 90%) = 1.833, T(6-1, 90%) = 2.015
@@ -161,6 +169,17 @@ def confCompute(inDic, inVari, retDic):
 		stuT_5 = 2.015
 
 		retDic[key] = stuT_9 * pow(inVari[key]/len(inDic[key]), 1/2)
+
+def mergeMeanAndConfi(inDicMean, inDicConf):
+	''' Compute confidence interval, return to retDic
+
+	args:
+		inDic (dict): raw input data
+		inVari (dict): input variance data
+		retDic (dict): return confience interval data
+	'''	
+	for key, val in inDicMean.viewitems():
+		inDicMean[key].append(inDicConf[key])
 
 def collectData(directory):
 	# scan the directory to read every data 
@@ -189,6 +208,29 @@ def collectData(directory):
 						meanCompute(inputDic=dicThroughputRaw, 
 									retDic=g_dicThro_M3CTR0)
 
+						dicVariE2E = {}
+						variCompute(inDic=dicE2EDelayRaw,
+									inDicMean=g_dicMeanE2E_M3CTR0,
+									retDic=dicVariE2E)
+						dicConfE2E = {}
+						confCompute(inDic=dicE2EDelayRaw,
+									inDicVari=dicVari,
+									retDic=dicConfE2E)
+
+						mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR0,
+											inDicConf=dicConfE2E)
+
+						dicVariThro = {}
+						variCompute(inDic=dicE2EDelayRaw,
+									inDicMean=g_dicMeanE2E_M3CTR0,
+									retDic=dicVariThro)
+						dicConfThro = {}
+						confCompute(inDic=dicE2EDelayRaw,
+									inDicVari=dicVari,
+									retDic=dicConfThro)
+
+						mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR0,
+											inDicConf=dicConfThro)						
 						# varCompute(inData)
 
 					elif CTRMode == 1:
