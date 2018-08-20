@@ -86,13 +86,36 @@ def optionsSet():
 	options, args = optParser.parse_args()
 	return options
 
-def cdfMaking(dataList):
-	num_bins = 20
-	counts, bins = np.histogram(dataList, bins=num_bins, normed=True)
-	cdf = np.cumsum(counts)
-	print(counts, bins, cdf)
-	plt.plot(bins[1:], cdf/cdf[-1])
-	plt.show()	
+def cdfMaking(inDic):
+	''' Compute CDF, return to cdfData
+
+	args:
+		inDic (dict):
+	'''
+	dataList = [item for sublist in inDic.values() for item in sublist]
+
+	sort(dataList)
+
+	actFreq = []
+	for i in dataList:
+		if actFreq:
+			actFreq.append( 1.0/len(dataList) + actFreq[len(actFreq)-1])
+		else:
+			actFreq.append( 1.0/len(dataList) )
+
+	cdfData = []
+
+	for i in dataList:
+		cdfData[i] = actFreq[dataList.index(i)]
+
+	return cdfData
+
+	# num_bins = 20
+	# counts, bins = np.histogram(dataList, bins=num_bins, normed=True)
+	# cdf = np.cumsum(counts)
+	# print(counts, bins, cdf)
+	# plt.plot(bins[1:], cdf/cdf[-1])
+	# plt.show()	
 
 
 def saveData(xAxis, yAxisDataPoint, targetDic):
@@ -103,13 +126,46 @@ def saveData(xAxis, yAxisDataPoint, targetDic):
 	else:
 		targetDic[key]=[valEle]
 
-# def meanCompute(targetDic, retDic):
+def meanCompute(inputDic, retDic):
+	for key, valList in inputDic.viewitems():
+		retDic[key] = sum(valList)/len(valList)
 
+def variCompute(inDic, inDicMean, retDic):
+	''' Compute variance, return to retDic
+
+	args:
+		inDic (dict):
+		inDicMean (dict):
+		retDic (dict):
+	'''
+	for key, valList in inDic.viewitems():
+		sum_var = 0.0
+		for value in valList:
+			sum_var = sum_var + pow(value-inDicMean[key], 2)
+
+		vari = sum_var / (len(valList)-1)
+
+		retDic[key] = vari
+
+def confCompute(inDic, inVari, retDic):
+	''' Compute confidence interval, return to retDic
+
+	args:
+		inDic (dict):
+		inVari (dict):
+		retDic (dict):
+	'''	
+	for key, val in inVari.viewitems():
+		# student t dis., T(10-1, 90%) = 1.833, T(6-1, 90%) = 2.015
+		stuT_9 = 1.833
+		stuT_5 = 2.015
+
+		retDic[key] = stuT_9 * pow(inVari[key]/len(inDic[key]), 1/2)
 
 def collectData(directory):
 	# scan the directory to read every data 
 	for root, dirs, files in os.walk(directory):
-		print(root, files)
+		# print(root, files)
 		for filename in files:
 			with open(root+filename, 'r') as f:
 				data = json.load(f)
@@ -119,20 +175,21 @@ def collectData(directory):
 				if mode == 3:
 					if CTRMode == 0:
 						dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+						saveData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=dicE2EDelayRaw)
 
 						dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								dicThroughputRaw)
+						saveData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M3CTR0[key] \
-								= sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M3CTR0[key] = sum(valList)/len(valList)
+						meanCompute(inputDic=dicE2EDelayRaw, 
+									retDic=g_dicMeanE2E_M3CTR0)
+						meanCompute(inputDic=dicThroughputRaw, 
+									retDic=g_dicThro_M3CTR0)
+
+						# varCompute(inData)
 
 					elif CTRMode == 1:
 						dicE2EDelayRaw = {}
@@ -145,11 +202,10 @@ def collectData(directory):
 								data["throughput"], 
 								dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M3CTR1[key] = sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M3CTR1[key] = sum(valList)/len(valList)
-
+						meanCompute(inputDic=dicE2EDelayRaw, 
+									retDic=g_dicMeanE2E_M3CTR1)
+						meanCompute(inputDic=dicThroughputRaw, 
+									retDic=g_dicThro_M3CTR1)
 					elif CTRMode == 2:
 						dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
@@ -161,10 +217,10 @@ def collectData(directory):
 								data["throughput"], 
 								dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M3CTR2[key] = sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M3CTR2[key] = sum(valList)/len(valList)
+						meanCompute(inputDic=dicE2EDelayRaw, 
+									retDic=g_dicMeanE2E_M3CTR2)
+						meanCompute(inputDic=dicThroughputRaw, 
+									retDic=g_dicThro_M3CTR2)
 
 					elif CTRMode == 3:
 						dicE2EDelayRaw = {}
@@ -177,10 +233,10 @@ def collectData(directory):
 								data["throughput"], 
 								dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M3CTR3[key] = sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M3CTR3[key] = sum(valList)/len(valList)
+						meanCompute(inputDic=dicE2EDelayRaw, 
+									retDic=g_dicMeanE2E_M3CTR3)
+						meanCompute(inputDic=dicThroughputRaw, 
+									retDic=g_dicThro_M3CTR3)
 
 				elif mode == 6:
 					if CTRMode == 0:
@@ -194,10 +250,8 @@ def collectData(directory):
 								data["throughput"], 
 								dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M6CTR0[key] = sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M6CTR0[key] = sum(valList)/len(valList)
+						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR0)
+						meanCompute(dicThroughputRaw, g_dicThro_M6CTR0)
 
 					elif CTRMode == 1:
 						dicE2EDelayRaw = {}
@@ -210,10 +264,8 @@ def collectData(directory):
 								data["throughput"], 
 								dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M6CTR1[key] = sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M6CTR1[key] = sum(valList)/len(valList)
+						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR1)
+						meanCompute(dicThroughputRaw, g_dicThro_M6CTR1)
 
 					elif CTRMode == 2:
 						dicE2EDelayRaw = {}
@@ -226,10 +278,8 @@ def collectData(directory):
 								data["throughput"], 
 								dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M6CTR2[key] = sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M6CTR2[key] = sum(valList)/len(valList)
+						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR2)
+						meanCompute(dicThroughputRaw, g_dicThro_M6CTR2)
 
 					elif CTRMode == 3:
 						dicE2EDelayRaw = {}
@@ -242,12 +292,8 @@ def collectData(directory):
 								data["throughput"], 
 								dicThroughputRaw)
 
-						for key, valList in dicE2EDelayRaw.viewitems():
-							g_dicMeanE2E_M6CTR3[key] = sum(valList)/len(valList)
-						for key, valList in dicThroughputRaw.viewitems():
-							g_dicThro_M6CTR3[key] = sum(valList)/len(valList)
-
-
+						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR3)
+						meanCompute(dicThroughputRaw, g_dicThro_M6CTR3)
 
 	print("M3CTR0")
 	pprint.pprint(g_dicMeanE2E_M3CTR0)
@@ -273,10 +319,6 @@ def collectData(directory):
 	print("M6CTR3")
 	pprint.pprint(g_dicMeanE2E_M6CTR3)
 	pprint.pprint(g_dicThro_M6CTR3)
-
-	# dataList = [item for sublist in dicMeanE2EDelayRaw.values() for item in sublist]
-
-	# print(dataList)
 
 
 # this is the main entry point of this script
@@ -323,5 +365,5 @@ if __name__ == "__main__":
 	if directory[len(directory)-1] != '/':
 		directory = directory + '/'
 
-	print(directory)
+	print("Scan: ", directory)
 	collectData(directory)
