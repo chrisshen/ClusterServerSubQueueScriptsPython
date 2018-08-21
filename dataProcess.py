@@ -3,7 +3,7 @@
 # Data collection and processing.
 # Main tasks:
 # 1. scan target directory to get file name
-# 2. read each json file
+# 2. read each JSON file
 # 3. save data to dictionary
 # 4. calculate statistic, e.g. mean, variance, confidence intervals, CDF
 # 5. save data to file for GNU Plot or matplot
@@ -110,15 +110,15 @@ def cdfMaking(inDic):
 
 	return cdfData
 
-	# num_bins = 20
-	# counts, bins = np.histogram(dataList, bins=num_bins, normed=True)
-	# cdf = np.cumsum(counts)
-	# print(counts, bins, cdf)
-	# plt.plot(bins[1:], cdf/cdf[-1])
-	# plt.show()	
+def readData(xAxis, yAxisDataPoint, targetDic):
+	''' Save data from each file, save it to the targetDic
 
-
-def saveData(xAxis, yAxisDataPoint, targetDic):
+	args:
+		xAxis (str, int): x axis point
+		yAxisDataPoint (float): raw data point
+	return:
+		targetDic (dict): 
+	'''
 	key = xAxis
 	valEle = yAxisDataPoint
 	if targetDic.has_key(key):
@@ -425,6 +425,8 @@ def processData():
 	g_cdfE2EDelayRaw_M6CTR3 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR3)
 	g_cdfThroRaw_M6CTR3 = cdfMaking(inDic=g_dicThroRaw_M6CTR3)
 
+
+	# Print for debug
 	print("M3CTR0")
 	pprint.pprint(g_dicMeanE2E_M3CTR0)
 	pprint.pprint(g_dicThro_M3CTR0)
@@ -463,7 +465,7 @@ def processData():
 
 
 def collectData(directory):
-	# scan the directory to read every data 
+	# scan the directory to read every data point
 	for root, dirs, files in os.walk(directory):
 		# print(root, files)
 		for filename in files:
@@ -475,12 +477,12 @@ def collectData(directory):
 				if mode == 3:
 					if CTRMode == 0:
 						# dicE2EDelayRaw = {}
-						saveData(xAxis=data["arrivalRate"], 
+						readData(xAxis=data["arrivalRate"], 
 								yAxisDataPoint=data["meanE2EDelay"], 
 								targetDic=g_dicE2EDelayRaw_M3CTR0)
 
 						# dicThroughputRaw = {}
-						saveData(xAxis=data["arrivalRate"], 
+						readData(xAxis=data["arrivalRate"], 
 								yAxisDataPoint=data["throughput"], 
 								targetDic=g_dicThroRaw_M3CTR0)
 
@@ -491,12 +493,12 @@ def collectData(directory):
 
 					elif CTRMode == 1:
 						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
 								g_dicE2EDelayRaw_M3CTR1)
 
 						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["throughput"], 
 								g_dicThroRaw_M3CTR1)
 
@@ -504,14 +506,15 @@ def collectData(directory):
 									retDic=g_dicMeanE2E_M3CTR1)
 						meanCompute(inputDic=g_dicThroRaw_M3CTR1, 
 									retDic=g_dicThro_M3CTR1)
+
 					elif CTRMode == 2:
 						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
 								g_dicE2EDelayRaw_M3CTR2)
 
 						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["throughput"], 
 								g_dicThroRaw_M3CTR2)
 
@@ -522,12 +525,12 @@ def collectData(directory):
 
 					elif CTRMode == 3:
 						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
 								g_dicE2EDelayRaw_M3CTR3)
 
 						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["throughput"], 
 								g_dicThroRaw_M3CTR3)
 
@@ -539,12 +542,12 @@ def collectData(directory):
 				elif mode == 6:
 					if CTRMode == 0:
 						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
 								g_dicE2EDelayRaw_M6CTR0)
 
 						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["throughput"], 
 								g_dicThroRaw_M6CTR0)
 
@@ -555,12 +558,12 @@ def collectData(directory):
 
 					elif CTRMode == 1:
 						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
 								g_dicE2EDelayRaw_M6CTR1)
 
 						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["throughput"], 
 								g_dicThroRaw_M6CTR1)
 
@@ -571,12 +574,12 @@ def collectData(directory):
 
 					elif CTRMode == 2:
 						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
 								g_dicE2EDelayRaw_M6CTR2)
 
 						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["throughput"], 
 								g_dicThroRaw_M6CTR2)
 
@@ -587,12 +590,12 @@ def collectData(directory):
 
 					elif CTRMode == 3:
 						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
 								g_dicE2EDelayRaw_M6CTR3)
 
 						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
+						readData(data["arrivalRate"], 
 								data["throughput"], 
 								g_dicThroRaw_M6CTR3)
 
@@ -600,9 +603,6 @@ def collectData(directory):
 									g_dicMeanE2E_M6CTR3)
 						meanCompute(g_dicThroRaw_M6CTR3, 
 									g_dicThro_M6CTR3)
-
-
-
 
 # this is the main entry point of this script
 if __name__ == "__main__":
