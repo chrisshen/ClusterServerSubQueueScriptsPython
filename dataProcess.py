@@ -184,144 +184,14 @@ def mergeMeanAndConfi(inDicMean, inDicConf):
 	for key, val in inDicMean.viewitems():
 		inDicMean[key].append(inDicConf[key])
 
-def collectData(directory):
-	# scan the directory to read every data 
-	for root, dirs, files in os.walk(directory):
-		# print(root, files)
-		for filename in files:
-			with open(root+filename, 'r') as f:
-				data = json.load(f)
-				
-				mode = data["mode"]
-				CTRMode = data["CTRMode"]
-				if mode == 3:
-					if CTRMode == 0:
-						# dicE2EDelayRaw = {}
-						saveData(xAxis=data["arrivalRate"], 
-								yAxisDataPoint=data["meanE2EDelay"], 
-								targetDic=g_dicE2EDelayRaw_M3CTR0)
+def processData():
+	''' Process collected data, generate confidence interval and CDF
 
-						# dicThroughputRaw = {}
-						saveData(xAxis=data["arrivalRate"], 
-								yAxisDataPoint=data["throughput"], 
-								targetDic=g_dicThroRaw_M3CTR0)
-
-						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR0, 
-									retDic=g_dicMeanE2E_M3CTR0)
-						meanCompute(inputDic=g_dicThroRaw_M3CTR0, 
-									retDic=g_dicThro_M3CTR0)
-
-					elif CTRMode == 1:
-						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								g_dicE2EDelayRaw_M3CTR1)
-
-						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								g_dicThroRaw_M3CTR1)
-
-						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR1, 
-									retDic=g_dicMeanE2E_M3CTR1)
-						meanCompute(inputDic=g_dicThroRaw_M3CTR1, 
-									retDic=g_dicThro_M3CTR1)
-					elif CTRMode == 2:
-						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								g_dicE2EDelayRaw_M3CTR2)
-
-						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								g_dicThroRaw_M3CTR2)
-
-						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR2, 
-									retDic=g_dicMeanE2E_M3CTR2)
-						meanCompute(inputDic=g_dicThroRaw_M3CTR2, 
-									retDic=g_dicThro_M3CTR2)
-
-					elif CTRMode == 3:
-						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								g_dicE2EDelayRaw_M3CTR3)
-
-						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								g_dicThroRaw_M3CTR3)
-
-						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR3, 
-									retDic=g_dicMeanE2E_M3CTR3)
-						meanCompute(inputDic=g_dicThroRaw_M3CTR3, 
-									retDic=g_dicThro_M3CTR3)
-
-				elif mode == 6:
-					if CTRMode == 0:
-						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								g_dicE2EDelayRaw_M6CTR0)
-
-						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								g_dicThroRaw_M6CTR0)
-
-						meanCompute(g_dicE2EDelayRaw_M6CTR0, 
-									g_dicMeanE2E_M6CTR0)
-						meanCompute(g_dicThroRaw_M6CTR0, 
-									g_dicThro_M6CTR0)
-
-					elif CTRMode == 1:
-						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								g_dicE2EDelayRaw_M6CTR1)
-
-						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								g_dicThroRaw_M6CTR1)
-
-						meanCompute(g_dicE2EDelayRaw_M6CTR1, 
-									g_dicMeanE2E_M6CTR1)
-						meanCompute(g_dicThroRaw_M6CTR1, 
-									g_dicThro_M6CTR1)
-
-					elif CTRMode == 2:
-						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								g_dicE2EDelayRaw_M6CTR2)
-
-						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								g_dicThroRaw_M6CTR2)
-
-						meanCompute(g_dicE2EDelayRaw_M6CTR2, 
-									g_dicMeanE2E_M6CTR2)
-						meanCompute(g_dicThroRaw_M6CTR2, 
-									g_dicThro_M6CTR2)
-
-					elif CTRMode == 3:
-						# dicE2EDelayRaw = {}
-						saveData(data["arrivalRate"], 
-								data["meanE2EDelay"], 
-								g_dicE2EDelayRaw_M6CTR3)
-
-						# dicThroughputRaw = {}
-						saveData(data["arrivalRate"], 
-								data["throughput"], 
-								g_dicThroRaw_M6CTR3)
-
-						meanCompute(g_dicE2EDelayRaw_M6CTR3, 
-									g_dicMeanE2E_M6CTR3)
-						meanCompute(g_dicThroRaw_M6CTR3, 
-									g_dicThro_M6CTR3)
+	args:
+		inDic (dict): raw input data
+		inVari (dict): input variance data
+		retDic (dict): return confience interval data
+	'''	
 
 	# M3CTR0
 	dicVariE2E = {}
@@ -592,6 +462,147 @@ def collectData(directory):
 	pprint.pprint(g_dicThro_M6CTR3)
 
 
+def collectData(directory):
+	# scan the directory to read every data 
+	for root, dirs, files in os.walk(directory):
+		# print(root, files)
+		for filename in files:
+			with open(root+filename, 'r') as f:
+				data = json.load(f)
+				
+				mode = data["mode"]
+				CTRMode = data["CTRMode"]
+				if mode == 3:
+					if CTRMode == 0:
+						# dicE2EDelayRaw = {}
+						saveData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=g_dicE2EDelayRaw_M3CTR0)
+
+						# dicThroughputRaw = {}
+						saveData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=g_dicThroRaw_M3CTR0)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR0, 
+									retDic=g_dicMeanE2E_M3CTR0)
+						meanCompute(inputDic=g_dicThroRaw_M3CTR0, 
+									retDic=g_dicThro_M3CTR0)
+
+					elif CTRMode == 1:
+						# dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								g_dicE2EDelayRaw_M3CTR1)
+
+						# dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								g_dicThroRaw_M3CTR1)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR1, 
+									retDic=g_dicMeanE2E_M3CTR1)
+						meanCompute(inputDic=g_dicThroRaw_M3CTR1, 
+									retDic=g_dicThro_M3CTR1)
+					elif CTRMode == 2:
+						# dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								g_dicE2EDelayRaw_M3CTR2)
+
+						# dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								g_dicThroRaw_M3CTR2)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR2, 
+									retDic=g_dicMeanE2E_M3CTR2)
+						meanCompute(inputDic=g_dicThroRaw_M3CTR2, 
+									retDic=g_dicThro_M3CTR2)
+
+					elif CTRMode == 3:
+						# dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								g_dicE2EDelayRaw_M3CTR3)
+
+						# dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								g_dicThroRaw_M3CTR3)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR3, 
+									retDic=g_dicMeanE2E_M3CTR3)
+						meanCompute(inputDic=g_dicThroRaw_M3CTR3, 
+									retDic=g_dicThro_M3CTR3)
+
+				elif mode == 6:
+					if CTRMode == 0:
+						# dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								g_dicE2EDelayRaw_M6CTR0)
+
+						# dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								g_dicThroRaw_M6CTR0)
+
+						meanCompute(g_dicE2EDelayRaw_M6CTR0, 
+									g_dicMeanE2E_M6CTR0)
+						meanCompute(g_dicThroRaw_M6CTR0, 
+									g_dicThro_M6CTR0)
+
+					elif CTRMode == 1:
+						# dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								g_dicE2EDelayRaw_M6CTR1)
+
+						# dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								g_dicThroRaw_M6CTR1)
+
+						meanCompute(g_dicE2EDelayRaw_M6CTR1, 
+									g_dicMeanE2E_M6CTR1)
+						meanCompute(g_dicThroRaw_M6CTR1, 
+									g_dicThro_M6CTR1)
+
+					elif CTRMode == 2:
+						# dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								g_dicE2EDelayRaw_M6CTR2)
+
+						# dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								g_dicThroRaw_M6CTR2)
+
+						meanCompute(g_dicE2EDelayRaw_M6CTR2, 
+									g_dicMeanE2E_M6CTR2)
+						meanCompute(g_dicThroRaw_M6CTR2, 
+									g_dicThro_M6CTR2)
+
+					elif CTRMode == 3:
+						# dicE2EDelayRaw = {}
+						saveData(data["arrivalRate"], 
+								data["meanE2EDelay"], 
+								g_dicE2EDelayRaw_M6CTR3)
+
+						# dicThroughputRaw = {}
+						saveData(data["arrivalRate"], 
+								data["throughput"], 
+								g_dicThroRaw_M6CTR3)
+
+						meanCompute(g_dicE2EDelayRaw_M6CTR3, 
+									g_dicMeanE2E_M6CTR3)
+						meanCompute(g_dicThroRaw_M6CTR3, 
+									g_dicThro_M6CTR3)
+
+
+
 
 # this is the main entry point of this script
 if __name__ == "__main__":
@@ -697,3 +708,4 @@ if __name__ == "__main__":
 
 	print("Scan:", directory)
 	collectData(directory)
+	processData()
