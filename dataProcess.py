@@ -94,7 +94,7 @@ def cdfMaking(inDic):
 	'''
 	dataList = [item for sublist in inDic.values() for item in sublist]
 
-	sort(dataList)
+	dataList = sorted(dataList)
 
 	actFreq = []
 	for i in dataList:
@@ -106,7 +106,7 @@ def cdfMaking(inDic):
 	cdfData = []
 
 	for i in dataList:
-		cdfData[i] = actFreq[dataList.index(i)]
+		cdfData.append(actFreq[dataList.index(i)])
 
 	return cdfData
 
@@ -348,6 +348,9 @@ def collectData(directory):
 	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR0,
 						inDicConf=dicConfThro)	
 
+	# CDF
+	g_cdfE2EDelayRaw_M3CTR0 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR0)
+	g_cdfThroRaw_M3CTR0 = cdfMaking(inDic=g_dicThroRaw_M3CTR0)
 
 	# M3CTR1
 	dicVariE2E = {}
@@ -374,6 +377,10 @@ def collectData(directory):
 	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR1,
 						inDicConf=dicConfThro)
 
+	# CDF
+	g_cdfE2EDelayRaw_M3CTR1 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR1)
+	g_cdfThroRaw_M3CTR1 = cdfMaking(inDic=g_dicThroRaw_M3CTR1)
+
 	# M3CTR2
 	dicVariE2E = {}
 	variCompute(inDic=g_dicE2EDelayRaw_M3CTR2,
@@ -398,6 +405,10 @@ def collectData(directory):
 
 	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR2,
 						inDicConf=dicConfThro)	
+	
+	# CDF
+	g_cdfE2EDelayRaw_M3CTR2 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR2)
+	g_cdfThroRaw_M3CTR2 = cdfMaking(inDic=g_dicThroRaw_M3CTR2)
 
 	# M3CTR3
 	dicVariE2E = {}
@@ -424,6 +435,10 @@ def collectData(directory):
 	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR3,
 						inDicConf=dicConfThro)
 
+	# CDF
+	g_cdfE2EDelayRaw_M3CTR3 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR3)
+	g_cdfThroRaw_M3CTR3 = cdfMaking(inDic=g_dicThroRaw_M3CTR3)
+
 	# M6CTR0
 	dicVariE2E = {}
 	variCompute(inDic=g_dicE2EDelayRaw_M6CTR0,
@@ -448,6 +463,10 @@ def collectData(directory):
 
 	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR0,
 						inDicConf=dicConfThro)
+
+	# CDF
+	g_cdfE2EDelayRaw_M6CTR0 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR0)
+	g_cdfThroRaw_M6CTR0 = cdfMaking(inDic=g_dicThroRaw_M6CTR0)
 
 	# M6CTR1
 	dicVariE2E = {}
@@ -474,6 +493,10 @@ def collectData(directory):
 	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR1,
 						inDicConf=dicConfThro)
 
+	# CDF
+	g_cdfE2EDelayRaw_M6CTR1 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR1)
+	g_cdfThroRaw_M6CTR1 = cdfMaking(inDic=g_dicThroRaw_M6CTR1)
+
 	# M6CTR2
 	dicVariE2E = {}
 	variCompute(inDic=g_dicE2EDelayRaw_M6CTR2,
@@ -498,7 +521,11 @@ def collectData(directory):
 
 	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR2,
 						inDicConf=dicConfThro)
-
+	
+	# CDF
+	g_cdfE2EDelayRaw_M6CTR2 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR2)
+	g_cdfThroRaw_M6CTR2 = cdfMaking(inDic=g_dicThroRaw_M6CTR2)
+	
 	# M6CTR3
 	dicVariE2E = {}
 	variCompute(inDic=g_dicE2EDelayRaw_M6CTR3,
@@ -523,38 +550,55 @@ def collectData(directory):
 
 	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR3,
 						inDicConf=dicConfThro)	
-
+	
+	# CDF
+	g_cdfE2EDelayRaw_M6CTR3 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR3)
+	g_cdfThroRaw_M6CTR3 = cdfMaking(inDic=g_dicThroRaw_M6CTR3)
 
 	print("M3CTR0")
 	pprint.pprint(g_dicMeanE2E_M3CTR0)
 	pprint.pprint(g_dicThro_M3CTR0)
+
+	print("CDF")
+	pprint.pprint(g_cdfE2EDelayRaw_M3CTR0)
+	pprint.pprint(g_cdfThroRaw_M3CTR0)
+
 	print("M3CTR1")
 	pprint.pprint(g_dicMeanE2E_M3CTR1)
 	pprint.pprint(g_dicThro_M3CTR1)
+
 	print("M3CTR2")
 	pprint.pprint(g_dicMeanE2E_M3CTR2)
 	pprint.pprint(g_dicThro_M3CTR2)
+
 	print("M3CTR3")
 	pprint.pprint(g_dicMeanE2E_M3CTR3)
 	pprint.pprint(g_dicThro_M3CTR3)
+
 	print("M6CTR0")
 	pprint.pprint(g_dicMeanE2E_M6CTR0)
 	pprint.pprint(g_dicThro_M6CTR0)
+
 	print("M6CTR1")
 	pprint.pprint(g_dicMeanE2E_M6CTR1)
-	pprint.pprint(g_dicThro_M6CTR1)	
+	pprint.pprint(g_dicThro_M6CTR1)
+
 	print("M6CTR2")
 	pprint.pprint(g_dicMeanE2E_M6CTR2)
-	pprint.pprint(g_dicThro_M6CTR2)	
+	pprint.pprint(g_dicThro_M6CTR2)
+
 	print("M6CTR3")
 	pprint.pprint(g_dicMeanE2E_M6CTR3)
 	pprint.pprint(g_dicThro_M6CTR3)
+
+
 
 # this is the main entry point of this script
 if __name__ == "__main__":
 	options = optionsSet()
 	directory = options.directory
 
+	#E2E delay
 	global g_dicE2EDelayRaw_M3CTR0
 	g_dicE2EDelayRaw_M3CTR0={}
 	global g_dicMeanE2E_M3CTR0
@@ -571,6 +615,12 @@ if __name__ == "__main__":
 	g_dicE2EDelayRaw_M3CTR3={}	
 	global g_dicMeanE2E_M3CTR3
 	g_dicMeanE2E_M3CTR3 = {}
+
+	#CDF
+	global g_cdfE2EDelayRaw_M3CTR0
+	global g_cdfE2EDelayRaw_M3CTR1
+	global g_cdfE2EDelayRaw_M3CTR2
+	global g_cdfE2EDelayRaw_M3CTR3
 
 	global g_dicE2EDelayRaw_M6CTR0
 	g_dicE2EDelayRaw_M6CTR0={}
@@ -589,6 +639,13 @@ if __name__ == "__main__":
 	global g_dicMeanE2E_M6CTR3
 	g_dicMeanE2E_M6CTR3 = {}
 
+	#CDF
+	global g_cdfE2EDelayRaw_M6CTR0
+	global g_cdfE2EDelayRaw_M6CTR1
+	global g_cdfE2EDelayRaw_M6CTR2
+	global g_cdfE2EDelayRaw_M6CTR3	
+
+	# Throughput
 	global g_dicThroRaw_M3CTR0
 	g_dicThroRaw_M3CTR0={}
 	global g_dicThro_M3CTR0
@@ -606,6 +663,12 @@ if __name__ == "__main__":
 	global g_dicThro_M3CTR3
 	g_dicThro_M3CTR3 = {}
 
+	# CDF
+	global g_cdfThroRaw_M3CTR0
+	global g_cdfThroRaw_M3CTR1
+	global g_cdfThroRaw_M3CTR2
+	global g_cdfThroRaw_M3CTR3	
+
 	global g_dicThroRaw_M6CTR0
 	g_dicThroRaw_M6CTR0={}
 	global g_dicThro_M6CTR0
@@ -622,6 +685,12 @@ if __name__ == "__main__":
 	g_dicThroRaw_M6CTR3={}
 	global g_dicThro_M6CTR3
 	g_dicThro_M6CTR3 = {}
+
+	# CDF
+	global g_cdfThroRaw_M6CTR0
+	global g_cdfThroRaw_M6CTR1
+	global g_cdfThroRaw_M6CTR2
+	global g_cdfThroRaw_M6CTR3	
 
 	if directory[len(directory)-1] != '/':
 		directory = directory + '/'
