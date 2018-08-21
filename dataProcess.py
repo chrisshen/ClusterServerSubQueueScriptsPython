@@ -146,11 +146,14 @@ def variCompute(inDic, inDicMean, retDic):
 		inDicMean (dict): mean data
 		retDic (dict): return variance
 	'''
+	# print(inDic)
+	# print(inDicMean)
 	for key, valList in inDic.viewitems():
 		sum_var = 0.0
 		for value in valList:
 			sum_var = sum_var + pow(value-inDicMean.get(key)[0], 2)
 
+		# print(valList)
 		vari = sum_var / (len(valList)-1)
 
 		retDic[key] = vari
@@ -193,149 +196,334 @@ def collectData(directory):
 				CTRMode = data["CTRMode"]
 				if mode == 3:
 					if CTRMode == 0:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(xAxis=data["arrivalRate"], 
 								yAxisDataPoint=data["meanE2EDelay"], 
-								targetDic=dicE2EDelayRaw)
+								targetDic=g_dicE2EDelayRaw_M3CTR0)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(xAxis=data["arrivalRate"], 
 								yAxisDataPoint=data["throughput"], 
-								targetDic=dicThroughputRaw)
+								targetDic=g_dicThroRaw_M3CTR0)
 
-						meanCompute(inputDic=dicE2EDelayRaw, 
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR0, 
 									retDic=g_dicMeanE2E_M3CTR0)
-						meanCompute(inputDic=dicThroughputRaw, 
+						meanCompute(inputDic=g_dicThroRaw_M3CTR0, 
 									retDic=g_dicThro_M3CTR0)
 
-						dicVariE2E = {}
-						variCompute(inDic=dicE2EDelayRaw,
-									inDicMean=g_dicMeanE2E_M3CTR0,
-									retDic=dicVariE2E)
-						dicConfE2E = {}
-						confCompute(inDic=dicE2EDelayRaw,
-									inDicVari=dicVari,
-									retDic=dicConfE2E)
-
-						mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR0,
-											inDicConf=dicConfE2E)
-
-						dicVariThro = {}
-						variCompute(inDic=dicE2EDelayRaw,
-									inDicMean=g_dicMeanE2E_M3CTR0,
-									retDic=dicVariThro)
-						dicConfThro = {}
-						confCompute(inDic=dicE2EDelayRaw,
-									inDicVari=dicVari,
-									retDic=dicConfThro)
-
-						mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR0,
-											inDicConf=dicConfThro)						
-						# varCompute(inData)
-
 					elif CTRMode == 1:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+								g_dicE2EDelayRaw_M3CTR1)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(data["arrivalRate"], 
 								data["throughput"], 
-								dicThroughputRaw)
+								g_dicThroRaw_M3CTR1)
 
-						meanCompute(inputDic=dicE2EDelayRaw, 
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR1, 
 									retDic=g_dicMeanE2E_M3CTR1)
-						meanCompute(inputDic=dicThroughputRaw, 
+						meanCompute(inputDic=g_dicThroRaw_M3CTR1, 
 									retDic=g_dicThro_M3CTR1)
 					elif CTRMode == 2:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+								g_dicE2EDelayRaw_M3CTR2)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(data["arrivalRate"], 
 								data["throughput"], 
-								dicThroughputRaw)
+								g_dicThroRaw_M3CTR2)
 
-						meanCompute(inputDic=dicE2EDelayRaw, 
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR2, 
 									retDic=g_dicMeanE2E_M3CTR2)
-						meanCompute(inputDic=dicThroughputRaw, 
+						meanCompute(inputDic=g_dicThroRaw_M3CTR2, 
 									retDic=g_dicThro_M3CTR2)
 
 					elif CTRMode == 3:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+								g_dicE2EDelayRaw_M3CTR3)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(data["arrivalRate"], 
 								data["throughput"], 
-								dicThroughputRaw)
+								g_dicThroRaw_M3CTR3)
 
-						meanCompute(inputDic=dicE2EDelayRaw, 
+						meanCompute(inputDic=g_dicE2EDelayRaw_M3CTR3, 
 									retDic=g_dicMeanE2E_M3CTR3)
-						meanCompute(inputDic=dicThroughputRaw, 
+						meanCompute(inputDic=g_dicThroRaw_M3CTR3, 
 									retDic=g_dicThro_M3CTR3)
 
 				elif mode == 6:
 					if CTRMode == 0:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+								g_dicE2EDelayRaw_M6CTR0)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(data["arrivalRate"], 
 								data["throughput"], 
-								dicThroughputRaw)
+								g_dicThroRaw_M6CTR0)
 
-						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR0)
-						meanCompute(dicThroughputRaw, g_dicThro_M6CTR0)
+						meanCompute(g_dicE2EDelayRaw_M6CTR0, 
+									g_dicMeanE2E_M6CTR0)
+						meanCompute(g_dicThroRaw_M6CTR0, 
+									g_dicThro_M6CTR0)
 
 					elif CTRMode == 1:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+								g_dicE2EDelayRaw_M6CTR1)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(data["arrivalRate"], 
 								data["throughput"], 
-								dicThroughputRaw)
+								g_dicThroRaw_M6CTR1)
 
-						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR1)
-						meanCompute(dicThroughputRaw, g_dicThro_M6CTR1)
+						meanCompute(g_dicE2EDelayRaw_M6CTR1, 
+									g_dicMeanE2E_M6CTR1)
+						meanCompute(g_dicThroRaw_M6CTR1, 
+									g_dicThro_M6CTR1)
 
 					elif CTRMode == 2:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+								g_dicE2EDelayRaw_M6CTR2)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(data["arrivalRate"], 
 								data["throughput"], 
-								dicThroughputRaw)
+								g_dicThroRaw_M6CTR2)
 
-						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR2)
-						meanCompute(dicThroughputRaw, g_dicThro_M6CTR2)
+						meanCompute(g_dicE2EDelayRaw_M6CTR2, 
+									g_dicMeanE2E_M6CTR2)
+						meanCompute(g_dicThroRaw_M6CTR2, 
+									g_dicThro_M6CTR2)
 
 					elif CTRMode == 3:
-						dicE2EDelayRaw = {}
+						# dicE2EDelayRaw = {}
 						saveData(data["arrivalRate"], 
 								data["meanE2EDelay"], 
-								dicE2EDelayRaw)
+								g_dicE2EDelayRaw_M6CTR3)
 
-						dicThroughputRaw = {}
+						# dicThroughputRaw = {}
 						saveData(data["arrivalRate"], 
 								data["throughput"], 
-								dicThroughputRaw)
+								g_dicThroRaw_M6CTR3)
 
-						meanCompute(dicE2EDelayRaw, g_dicMeanE2E_M6CTR3)
-						meanCompute(dicThroughputRaw, g_dicThro_M6CTR3)
+						meanCompute(g_dicE2EDelayRaw_M6CTR3, 
+									g_dicMeanE2E_M6CTR3)
+						meanCompute(g_dicThroRaw_M6CTR3, 
+									g_dicThro_M6CTR3)
+
+	# M3CTR0
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M3CTR0,
+				inDicMean=g_dicMeanE2E_M3CTR0,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M3CTR0,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR0,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M3CTR0,
+				inDicMean=g_dicThro_M3CTR0,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M3CTR0,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR0,
+						inDicConf=dicConfThro)	
+
+
+	# M3CTR1
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M3CTR1,
+				inDicMean=g_dicMeanE2E_M3CTR1,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M3CTR1,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR1,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M3CTR1,
+				inDicMean=g_dicThro_M3CTR1,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M3CTR1,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR1,
+						inDicConf=dicConfThro)
+
+	# M3CTR2
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M3CTR2,
+				inDicMean=g_dicMeanE2E_M3CTR2,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M3CTR2,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR2,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M3CTR2,
+				inDicMean=g_dicThro_M3CTR2,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M3CTR2,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR2,
+						inDicConf=dicConfThro)	
+
+	# M3CTR3
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M3CTR3,
+				inDicMean=g_dicMeanE2E_M3CTR3,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M3CTR3,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR3,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M3CTR3,
+				inDicMean=g_dicThro_M3CTR3,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M3CTR3,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR3,
+						inDicConf=dicConfThro)
+
+	# M6CTR0
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M6CTR0,
+				inDicMean=g_dicMeanE2E_M6CTR0,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M6CTR0,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR0,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M6CTR0,
+				inDicMean=g_dicThro_M6CTR0,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M6CTR0,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR0,
+						inDicConf=dicConfThro)
+
+	# M6CTR1
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M6CTR1,
+				inDicMean=g_dicMeanE2E_M6CTR1,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M6CTR1,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR1,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M6CTR1,
+				inDicMean=g_dicThro_M6CTR1,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M6CTR1,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR1,
+						inDicConf=dicConfThro)
+
+	# M6CTR2
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M6CTR2,
+				inDicMean=g_dicMeanE2E_M6CTR2,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M6CTR2,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR2,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M6CTR2,
+				inDicMean=g_dicThro_M6CTR2,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M6CTR2,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR2,
+						inDicConf=dicConfThro)
+
+	# M6CTR3
+	dicVariE2E = {}
+	variCompute(inDic=g_dicE2EDelayRaw_M6CTR3,
+				inDicMean=g_dicMeanE2E_M6CTR3,
+				retDic=dicVariE2E)
+	dicConfE2E = {}
+	confCompute(inDic=g_dicE2EDelayRaw_M6CTR3,
+				inVari=dicVariE2E,
+				retDic=dicConfE2E)
+
+	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR3,
+						inDicConf=dicConfE2E)
+
+	dicVariThro = {}
+	variCompute(inDic=g_dicThroRaw_M6CTR3,
+				inDicMean=g_dicThro_M6CTR3,
+				retDic=dicVariThro)
+	dicConfThro = {}
+	confCompute(inDic=g_dicThroRaw_M6CTR3,
+				inVari=dicVariThro,
+				retDic=dicConfThro)
+
+	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR3,
+						inDicConf=dicConfThro)	
+
 
 	print("M3CTR0")
 	pprint.pprint(g_dicMeanE2E_M3CTR0)
@@ -362,50 +550,81 @@ def collectData(directory):
 	pprint.pprint(g_dicMeanE2E_M6CTR3)
 	pprint.pprint(g_dicThro_M6CTR3)
 
-
 # this is the main entry point of this script
 if __name__ == "__main__":
 	options = optionsSet()
 	directory = options.directory
 
+	global g_dicE2EDelayRaw_M3CTR0
+	g_dicE2EDelayRaw_M3CTR0={}
 	global g_dicMeanE2E_M3CTR0
 	g_dicMeanE2E_M3CTR0 = {}
+	global g_dicE2EDelayRaw_M3CTR1
+	g_dicE2EDelayRaw_M3CTR1={}
 	global g_dicMeanE2E_M3CTR1
 	g_dicMeanE2E_M3CTR1 = {}
+	global g_dicE2EDelayRaw_M3CTR2
+	g_dicE2EDelayRaw_M3CTR2={}
 	global g_dicMeanE2E_M3CTR2
 	g_dicMeanE2E_M3CTR2 = {}
+	global g_dicE2EDelayRaw_M3CTR3
+	g_dicE2EDelayRaw_M3CTR3={}	
 	global g_dicMeanE2E_M3CTR3
 	g_dicMeanE2E_M3CTR3 = {}
 
+	global g_dicE2EDelayRaw_M6CTR0
+	g_dicE2EDelayRaw_M6CTR0={}
 	global g_dicMeanE2E_M6CTR0
 	g_dicMeanE2E_M6CTR0 = {}
+	global g_dicE2EDelayRaw_M6CTR1
+	g_dicE2EDelayRaw_M6CTR1={}
 	global g_dicMeanE2E_M6CTR1
 	g_dicMeanE2E_M6CTR1 = {}
+	global g_dicE2EDelayRaw_M6CTR2
+	g_dicE2EDelayRaw_M6CTR2={}
 	global g_dicMeanE2E_M6CTR2
 	g_dicMeanE2E_M6CTR2 = {}
+	global g_dicE2EDelayRaw_M6CTR3
+	g_dicE2EDelayRaw_M6CTR3={}
 	global g_dicMeanE2E_M6CTR3
 	g_dicMeanE2E_M6CTR3 = {}
 
+	global g_dicThroRaw_M3CTR0
+	g_dicThroRaw_M3CTR0={}
 	global g_dicThro_M3CTR0
 	g_dicThro_M3CTR0 = {}
+	global g_dicThroRaw_M3CTR1
+	g_dicThroRaw_M3CTR1={}	
 	global g_dicThro_M3CTR1
 	g_dicThro_M3CTR1 = {}
+	global g_dicThroRaw_M3CTR2
+	g_dicThroRaw_M3CTR2={}
 	global g_dicThro_M3CTR2
 	g_dicThro_M3CTR2 = {}
+	global g_dicThroRaw_M3CTR3
+	g_dicThroRaw_M3CTR3={}
 	global g_dicThro_M3CTR3
 	g_dicThro_M3CTR3 = {}
 
+	global g_dicThroRaw_M6CTR0
+	g_dicThroRaw_M6CTR0={}
 	global g_dicThro_M6CTR0
 	g_dicThro_M6CTR0 = {}
+	global g_dicThroRaw_M6CTR1
+	g_dicThroRaw_M6CTR1={}
 	global g_dicThro_M6CTR1
 	g_dicThro_M6CTR1 = {}
+	global g_dicThroRaw_M6CTR2
+	g_dicThroRaw_M6CTR2={}
 	global g_dicThro_M6CTR2
 	g_dicThro_M6CTR2 = {}
+	global g_dicThroRaw_M6CTR3
+	g_dicThroRaw_M6CTR3={}
 	global g_dicThro_M6CTR3
 	g_dicThro_M6CTR3 = {}
 
 	if directory[len(directory)-1] != '/':
 		directory = directory + '/'
 
-	print("Scan: ", directory)
+	print("Scan:", directory)
 	collectData(directory)
