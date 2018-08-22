@@ -86,7 +86,7 @@ def optionsSet():
 	options, args = optParser.parse_args()
 	return options
 
-def cdfMaking(inDic):
+def cdfMaking(inDic, outCDFData):
 	''' Compute CDF, return to cdfData
 
 	args:
@@ -103,12 +103,12 @@ def cdfMaking(inDic):
 		else:
 			actFreq.append( 1.0/len(dataList) )
 
-	cdfData = []
+	# cdfData = []
 
 	for i in dataList:
-		cdfData.append(actFreq[dataList.index(i)])
+		outCDFData.append(actFreq[dataList.index(i)])
 
-	return cdfData
+	# return cdfData
 
 def readData(xAxis, yAxisDataPoint, targetDic):
 	''' Save data from each file, save it to the targetDic
@@ -184,6 +184,23 @@ def mergeMeanAndConfi(inDicMean, inDicConf):
 	for key, val in inDicMean.viewitems():
 		inDicMean[key].append(inDicConf[key])
 
+
+def outData(inputDicDataRaw, outputDicMeanData, outputCDF):
+	dicVari = {}
+	variCompute(inDic=inputDicDataRaw,
+				inDicMean=outputDicMeanData,
+				retDic=dicVari)
+	dicConf = {}
+	confCompute(inDic=inputDicDataRaw,
+				inVari=dicVari,
+				retDic=dicConf)
+
+	mergeMeanAndConfi(inDicMean=outputDicMeanData,
+						inDicConf=dicConf)
+
+	cdfMaking(inDic=inputDicDataRaw,
+				outCDFData=outputCDF)
+
 def processData():
 	''' Process collected data, generate confidence interval and CDF
 
@@ -194,274 +211,122 @@ def processData():
 	'''	
 
 	# M3CTR0
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M3CTR0,
-				inDicMean=g_dicMeanE2E_M3CTR0,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M3CTR0,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR0,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M3CTR0,
-				inDicMean=g_dicThro_M3CTR0,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M3CTR0,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR0,
-						inDicConf=dicConfThro)	
-
-	# CDF
-	g_cdfE2EDelayRaw_M3CTR0 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR0)
-	g_cdfThroRaw_M3CTR0 = cdfMaking(inDic=g_dicThroRaw_M3CTR0)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M3CTR0,
+			outputDicMeanData=g_dicMeanE2E_M3CTR0,
+			outputCDF=g_cdfE2EDelayRaw_M3CTR0)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M3CTR0,
+			outputDicMeanData=g_dicThro_M3CTR0,
+			outputCDF=g_cdfThroRaw_M3CTR0)
 
 	# M3CTR1
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M3CTR1,
-				inDicMean=g_dicMeanE2E_M3CTR1,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M3CTR1,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR1,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M3CTR1,
-				inDicMean=g_dicThro_M3CTR1,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M3CTR1,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR1,
-						inDicConf=dicConfThro)
-
-	# CDF
-	g_cdfE2EDelayRaw_M3CTR1 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR1)
-	g_cdfThroRaw_M3CTR1 = cdfMaking(inDic=g_dicThroRaw_M3CTR1)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M3CTR1,
+			outputDicMeanData=g_dicMeanE2E_M3CTR1,
+			outputCDF=g_cdfE2EDelayRaw_M3CTR1)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M3CTR1,
+			outputDicMeanData=g_dicThro_M3CTR1,
+			outputCDF=g_cdfThroRaw_M3CTR1)
 
 	# M3CTR2
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M3CTR2,
-				inDicMean=g_dicMeanE2E_M3CTR2,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M3CTR2,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR2,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M3CTR2,
-				inDicMean=g_dicThro_M3CTR2,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M3CTR2,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR2,
-						inDicConf=dicConfThro)	
-	
-	# CDF
-	g_cdfE2EDelayRaw_M3CTR2 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR2)
-	g_cdfThroRaw_M3CTR2 = cdfMaking(inDic=g_dicThroRaw_M3CTR2)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M3CTR2,
+			outputDicMeanData=g_dicMeanE2E_M3CTR2,
+			outputCDF=g_cdfE2EDelayRaw_M3CTR2)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M3CTR2,
+			outputDicMeanData=g_dicThro_M3CTR2,
+			outputCDF=g_cdfThroRaw_M3CTR2)
 
 	# M3CTR3
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M3CTR3,
-				inDicMean=g_dicMeanE2E_M3CTR3,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M3CTR3,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M3CTR3,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M3CTR3,
-				inDicMean=g_dicThro_M3CTR3,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M3CTR3,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M3CTR3,
-						inDicConf=dicConfThro)
-
-	# CDF
-	g_cdfE2EDelayRaw_M3CTR3 = cdfMaking(inDic=g_dicE2EDelayRaw_M3CTR3)
-	g_cdfThroRaw_M3CTR3 = cdfMaking(inDic=g_dicThroRaw_M3CTR3)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M3CTR3,
+			outputDicMeanData=g_dicMeanE2E_M3CTR3,
+			outputCDF=g_cdfE2EDelayRaw_M3CTR3)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M3CTR3,
+			outputDicMeanData=g_dicThro_M3CTR3,
+			outputCDF=g_cdfThroRaw_M3CTR3)
 
 	# M6CTR0
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M6CTR0,
-				inDicMean=g_dicMeanE2E_M6CTR0,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M6CTR0,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR0,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M6CTR0,
-				inDicMean=g_dicThro_M6CTR0,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M6CTR0,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR0,
-						inDicConf=dicConfThro)
-
-	# CDF
-	g_cdfE2EDelayRaw_M6CTR0 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR0)
-	g_cdfThroRaw_M6CTR0 = cdfMaking(inDic=g_dicThroRaw_M6CTR0)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M6CTR0,
+			outputDicMeanData=g_dicMeanE2E_M6CTR0,
+			outputCDF=g_cdfE2EDelayRaw_M6CTR0)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M6CTR0,
+			outputDicMeanData=g_dicThro_M6CTR0,
+			outputCDF=g_cdfThroRaw_M6CTR0)
 
 	# M6CTR1
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M6CTR1,
-				inDicMean=g_dicMeanE2E_M6CTR1,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M6CTR1,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR1,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M6CTR1,
-				inDicMean=g_dicThro_M6CTR1,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M6CTR1,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR1,
-						inDicConf=dicConfThro)
-
-	# CDF
-	g_cdfE2EDelayRaw_M6CTR1 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR1)
-	g_cdfThroRaw_M6CTR1 = cdfMaking(inDic=g_dicThroRaw_M6CTR1)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M6CTR1,
+			outputDicMeanData=g_dicMeanE2E_M6CTR1,
+			outputCDF=g_cdfE2EDelayRaw_M6CTR1)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M6CTR1,
+			outputDicMeanData=g_dicThro_M6CTR1,
+			outputCDF=g_cdfThroRaw_M6CTR1)
 
 	# M6CTR2
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M6CTR2,
-				inDicMean=g_dicMeanE2E_M6CTR2,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M6CTR2,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR2,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M6CTR2,
-				inDicMean=g_dicThro_M6CTR2,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M6CTR2,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR2,
-						inDicConf=dicConfThro)
-	
-	# CDF
-	g_cdfE2EDelayRaw_M6CTR2 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR2)
-	g_cdfThroRaw_M6CTR2 = cdfMaking(inDic=g_dicThroRaw_M6CTR2)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M6CTR2,
+			outputDicMeanData=g_dicMeanE2E_M6CTR2,
+			outputCDF=g_cdfE2EDelayRaw_M6CTR2)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M6CTR2,
+			outputDicMeanData=g_dicThro_M6CTR2,
+			outputCDF=g_cdfThroRaw_M6CTR2)
 	
 	# M6CTR3
-	dicVariE2E = {}
-	variCompute(inDic=g_dicE2EDelayRaw_M6CTR3,
-				inDicMean=g_dicMeanE2E_M6CTR3,
-				retDic=dicVariE2E)
-	dicConfE2E = {}
-	confCompute(inDic=g_dicE2EDelayRaw_M6CTR3,
-				inVari=dicVariE2E,
-				retDic=dicConfE2E)
-
-	mergeMeanAndConfi(inDicMean=g_dicMeanE2E_M6CTR3,
-						inDicConf=dicConfE2E)
-
-	dicVariThro = {}
-	variCompute(inDic=g_dicThroRaw_M6CTR3,
-				inDicMean=g_dicThro_M6CTR3,
-				retDic=dicVariThro)
-	dicConfThro = {}
-	confCompute(inDic=g_dicThroRaw_M6CTR3,
-				inVari=dicVariThro,
-				retDic=dicConfThro)
-
-	mergeMeanAndConfi(inDicMean=g_dicThro_M6CTR3,
-						inDicConf=dicConfThro)	
-	
-	# CDF
-	g_cdfE2EDelayRaw_M6CTR3 = cdfMaking(inDic=g_dicE2EDelayRaw_M6CTR3)
-	g_cdfThroRaw_M6CTR3 = cdfMaking(inDic=g_dicThroRaw_M6CTR3)
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M6CTR3,
+			outputDicMeanData=g_dicMeanE2E_M6CTR3,
+			outputCDF=g_cdfE2EDelayRaw_M6CTR3)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M6CTR3,
+			outputDicMeanData=g_dicThro_M6CTR3,
+			outputCDF=g_cdfThroRaw_M6CTR3)
 
 
-	# Print for debug
-	print("M3CTR0")
-	pprint.pprint(g_dicMeanE2E_M3CTR0)
-	pprint.pprint(g_dicThro_M3CTR0)
+	# # Print for debug
+	# print("M3CTR0")
+	# pprint.pprint(g_dicMeanE2E_M3CTR0)
+	# pprint.pprint(g_dicThro_M3CTR0)
 
-	print("CDF")
-	pprint.pprint(g_cdfE2EDelayRaw_M3CTR0)
-	pprint.pprint(g_cdfThroRaw_M3CTR0)
+	# print("CDF")
+	# pprint.pprint(g_cdfE2EDelayRaw_M3CTR0)
+	# pprint.pprint(g_cdfThroRaw_M3CTR0)
 
-	print("M3CTR1")
-	pprint.pprint(g_dicMeanE2E_M3CTR1)
-	pprint.pprint(g_dicThro_M3CTR1)
+	# # print("M3CTR1")
+	# pprint.pprint(g_dicMeanE2E_M3CTR1)
+	# pprint.pprint(g_dicThro_M3CTR1)
 
-	print("M3CTR2")
-	pprint.pprint(g_dicMeanE2E_M3CTR2)
-	pprint.pprint(g_dicThro_M3CTR2)
+	# print("M3CTR2")
+	# pprint.pprint(g_dicMeanE2E_M3CTR2)
+	# pprint.pprint(g_dicThro_M3CTR2)
 
-	print("M3CTR3")
-	pprint.pprint(g_dicMeanE2E_M3CTR3)
-	pprint.pprint(g_dicThro_M3CTR3)
+	# print("M3CTR3")
+	# pprint.pprint(g_dicMeanE2E_M3CTR3)
+	# pprint.pprint(g_dicThro_M3CTR3)
 
-	print("M6CTR0")
-	pprint.pprint(g_dicMeanE2E_M6CTR0)
-	pprint.pprint(g_dicThro_M6CTR0)
+	# print("M6CTR0")
+	# pprint.pprint(g_dicMeanE2E_M6CTR0)
+	# pprint.pprint(g_dicThro_M6CTR0)
 
-	print("M6CTR1")
-	pprint.pprint(g_dicMeanE2E_M6CTR1)
-	pprint.pprint(g_dicThro_M6CTR1)
+	# print("M6CTR1")
+	# pprint.pprint(g_dicMeanE2E_M6CTR1)
+	# pprint.pprint(g_dicThro_M6CTR1)
 
-	print("M6CTR2")
-	pprint.pprint(g_dicMeanE2E_M6CTR2)
-	pprint.pprint(g_dicThro_M6CTR2)
+	# print("M6CTR2")
+	# pprint.pprint(g_dicMeanE2E_M6CTR2)
+	# pprint.pprint(g_dicThro_M6CTR2)
 
-	print("M6CTR3")
-	pprint.pprint(g_dicMeanE2E_M6CTR3)
-	pprint.pprint(g_dicThro_M6CTR3)
+	# print("M6CTR3")
+	# pprint.pprint(g_dicMeanE2E_M6CTR3)
+	# pprint.pprint(g_dicThro_M6CTR3)
 
 
 def collectData(directory):
@@ -629,9 +494,13 @@ if __name__ == "__main__":
 
 	#CDF
 	global g_cdfE2EDelayRaw_M3CTR0
+	g_cdfE2EDelayRaw_M3CTR0 = []
 	global g_cdfE2EDelayRaw_M3CTR1
+	g_cdfE2EDelayRaw_M3CTR1 = []
 	global g_cdfE2EDelayRaw_M3CTR2
+	g_cdfE2EDelayRaw_M3CTR2 = []
 	global g_cdfE2EDelayRaw_M3CTR3
+	g_cdfE2EDelayRaw_M3CTR3 =[]
 
 	global g_dicE2EDelayRaw_M6CTR0
 	g_dicE2EDelayRaw_M6CTR0={}
@@ -652,9 +521,13 @@ if __name__ == "__main__":
 
 	#CDF
 	global g_cdfE2EDelayRaw_M6CTR0
+	g_cdfE2EDelayRaw_M6CTR0 = []
 	global g_cdfE2EDelayRaw_M6CTR1
+	g_cdfE2EDelayRaw_M6CTR1 = []
 	global g_cdfE2EDelayRaw_M6CTR2
-	global g_cdfE2EDelayRaw_M6CTR3	
+	g_cdfE2EDelayRaw_M6CTR2 = []
+	global g_cdfE2EDelayRaw_M6CTR3
+	g_cdfE2EDelayRaw_M6CTR3 = []	
 
 	# Throughput
 	global g_dicThroRaw_M3CTR0
@@ -676,9 +549,13 @@ if __name__ == "__main__":
 
 	# CDF
 	global g_cdfThroRaw_M3CTR0
+	g_cdfThroRaw_M3CTR0 = []
 	global g_cdfThroRaw_M3CTR1
+	g_cdfThroRaw_M3CTR1 = []
 	global g_cdfThroRaw_M3CTR2
-	global g_cdfThroRaw_M3CTR3	
+	g_cdfThroRaw_M3CTR2 = []
+	global g_cdfThroRaw_M3CTR3
+	g_cdfThroRaw_M3CTR3 = []	
 
 	global g_dicThroRaw_M6CTR0
 	g_dicThroRaw_M6CTR0={}
@@ -699,9 +576,13 @@ if __name__ == "__main__":
 
 	# CDF
 	global g_cdfThroRaw_M6CTR0
+	g_cdfThroRaw_M6CTR0 = []
 	global g_cdfThroRaw_M6CTR1
+	g_cdfThroRaw_M6CTR1 = []
 	global g_cdfThroRaw_M6CTR2
-	global g_cdfThroRaw_M6CTR3	
+	g_cdfThroRaw_M6CTR2 = []
+	global g_cdfThroRaw_M6CTR3
+	g_cdfThroRaw_M6CTR3 = []	
 
 	if directory[len(directory)-1] != '/':
 		directory = directory + '/'
