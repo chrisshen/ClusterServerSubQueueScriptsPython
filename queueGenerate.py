@@ -153,6 +153,8 @@ if __name__ == "__main__":
 		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(CTRMode)
 	elif TLMode == 2:
 		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
+	elif TLMode == 0:
+		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
 	fullFileName = os.path.join(savePath, fileName)
 
 	# print format:
