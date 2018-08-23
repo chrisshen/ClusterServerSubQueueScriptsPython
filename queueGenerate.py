@@ -39,6 +39,12 @@ def optionsSet():
 							default="CTR",
 							help="Provide the simulation scheme name.")
 
+	optParser.add_option("-T", 
+							type="int", 
+							dest="Traffic_Light_Model", 
+							default=1, 
+							help="Traffic light model (0: periodical, 1: CTR, 2: Actuated) [default: %default]")
+
 	# endTime
 	optParser.add_option("-e",
 						type="int", 
@@ -63,6 +69,7 @@ def optionsSet():
 						help="max. speed limit of vehicles (unit : m/s), 80km/h = 22.22m/s [default: %default]")
 
 	# CTR mode
+	# -1: turn-off
 	# 0: compatible mode, compatible lanes pass
 	# 1: maximum mode, maximum lanes pass
 	# 2: combimed mode of 0 and 1
@@ -111,6 +118,7 @@ if __name__ == "__main__":
 	global CTRMode
 	global CTRSwitchPeriod
 	global CTRYLDura
+	global TLMode
 
 	prefix = options.prefix
 	name = options.name
@@ -120,6 +128,7 @@ if __name__ == "__main__":
 	CTRMode = options.CTRMode
 	CTRSwitchPeriod = options.CTRSwitchPeriod
 	CTRYLDura = options.CTRYLDura
+	TLMode = options.Traffic_Light_Model
 
 	s1 = "#!/bin/bash"
 	s2 = "#$ -cwd"
@@ -139,8 +148,11 @@ if __name__ == "__main__":
 	# arrival rate: 1, 10, 20, 30, 40, 50
 	arrivalRate = 60
 
-	fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(CTRMode)
-
+	fileName = ''
+	if TLMode == 1:
+		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(CTRMode)
+	elif TLMode == 2:
+		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
 	fullFileName = os.path.join(savePath, fileName)
 
 	# print format:
@@ -165,6 +177,7 @@ if __name__ == "__main__":
 			print('-s '+str(s), file=f, end=" ")
 			print('--arrivalRate '+str(a), file=f, end=" ")
 			print('--CTRMode '+str(CTRMode), file=f, end=" ")
+			print('-T '+str(TLMode), file=f, end=" ")
 			print('-m '+str(mode), file=f)
 			f.close()
 
