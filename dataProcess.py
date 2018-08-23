@@ -297,6 +297,24 @@ def processData():
 			outputDicMeanData=g_dicThro_M6CTR3,
 			outputCDF=g_cdfThroRaw_M6CTR3)
 
+	# Actuated
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M5ACT,
+			outputDicMeanData=g_dicMeanE2E_M5ACT,
+			outputCDF=g_cdfE2EDelayRaw_M5ACT)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M5ACT,
+			outputDicMeanData=g_dicThro_M5ACT,
+			outputCDF=g_cdfThroRaw_M5ACT)
+
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M7ACT,
+			outputDicMeanData=g_dicMeanE2E_M7ACT,
+			outputCDF=g_cdfE2EDelayRaw_M7ACT)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M7ACT,
+			outputDicMeanData=g_dicThro_M7ACT,
+			outputCDF=g_cdfThroRaw_M7ACT)
 
 	# Print for debug
 	print("M3CTR0")
@@ -308,16 +326,16 @@ def processData():
 	pprint.pprint(g_cdfThroRaw_M3CTR0)
 
 	# print("M3CTR1")
-	pprint.pprint(g_dicMeanE2E_M3CTR1)
-	pprint.pprint(g_dicThro_M3CTR1)
+	# pprint.pprint(g_dicMeanE2E_M3CTR1)
+	# pprint.pprint(g_dicThro_M3CTR1)
 
-	print("M3CTR2")
-	pprint.pprint(g_dicMeanE2E_M3CTR2)
-	pprint.pprint(g_dicThro_M3CTR2)
+	# print("M3CTR2")
+	# pprint.pprint(g_dicMeanE2E_M3CTR2)
+	# pprint.pprint(g_dicThro_M3CTR2)
 
-	print("M3CTR3")
-	pprint.pprint(g_dicMeanE2E_M3CTR3)
-	pprint.pprint(g_dicThro_M3CTR3)
+	# print("M3CTR3")
+	# pprint.pprint(g_dicMeanE2E_M3CTR3)
+	# pprint.pprint(g_dicThro_M3CTR3)
 
 	# print("M6CTR0")
 	# pprint.pprint(g_dicMeanE2E_M6CTR0)
@@ -334,6 +352,22 @@ def processData():
 	# print("M6CTR3")
 	# pprint.pprint(g_dicMeanE2E_M6CTR3)
 	# pprint.pprint(g_dicThro_M6CTR3)
+
+	print("M5ACT")
+	pprint.pprint(g_dicMeanE2E_M5ACT)
+	pprint.pprint(g_dicThro_M5ACT)
+
+	print("CDF")
+	pprint.pprint(g_cdfE2EDelayRaw_M5ACT)
+	pprint.pprint(g_cdfThroRaw_M5ACT)
+
+	print("M7ACT")
+	pprint.pprint(g_dicMeanE2E_M7ACT)
+	pprint.pprint(g_dicThro_M7ACT)
+
+	print("CDF")
+	pprint.pprint(g_cdfE2EDelayRaw_M7ACT)
+	pprint.pprint(g_cdfThroRaw_M7ACT)
 
 def saveDataToFile(filename, inputDicData):
 	with open(filename, 'w') as f:
@@ -370,6 +404,7 @@ def collectData(directory):
 				
 				mode = data["mode"]
 				CTRMode = data["CTRMode"]
+				TLMode = data["TLMode"]
 				if mode == 3:
 					if CTRMode == 0:
 						# dicE2EDelayRaw = {}
@@ -499,6 +534,38 @@ def collectData(directory):
 									g_dicMeanE2E_M6CTR3)
 						meanCompute(g_dicThroRaw_M6CTR3, 
 									g_dicThro_M6CTR3)
+				elif mode == 5:
+					if TLMode == 2:
+						# dicE2EDelayRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=g_dicE2EDelayRaw_M5ACT)
+
+						# dicThroughputRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=g_dicThroRaw_M5ACT)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M5ACT, 
+									retDic=g_dicMeanE2E_M5ACT)
+						meanCompute(inputDic=g_dicThroRaw_M5ACT, 
+									retDic=g_dicThro_M5ACT)
+				elif mode == 7:
+					if TLMode == 2:
+						# dicE2EDelayRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=g_dicE2EDelayRaw_M7ACT)
+
+						# dicThroughputRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=g_dicThroRaw_M7ACT)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M7ACT, 
+									retDic=g_dicMeanE2E_M7ACT)
+						meanCompute(inputDic=g_dicThroRaw_M7ACT, 
+									retDic=g_dicThro_M7ACT)
 
 # this is the main entry point of this script
 if __name__ == "__main__":
@@ -615,6 +682,36 @@ if __name__ == "__main__":
 	global g_cdfThroRaw_M6CTR3
 	g_cdfThroRaw_M6CTR3 = []	
 
+
+	# Actuated
+	global g_dicE2EDelayRaw_M5ACT
+	g_dicE2EDelayRaw_M5ACT={}
+	global g_dicMeanE2E_M5ACT
+	g_dicMeanE2E_M5ACT = {}
+	global g_dicE2EDelayRaw_M7ACT
+	g_dicE2EDelayRaw_M7ACT={}
+	global g_dicMeanE2E_M7ACT
+	g_dicMeanE2E_M7ACT = {}
+
+	global g_dicThroRaw_M5ACT
+	g_dicThroRaw_M5ACT={}
+	global g_dicThro_M5ACT
+	g_dicThro_M5ACT = {}
+	global g_dicThroRaw_M7ACT
+	g_dicThroRaw_M7ACT={}
+	global g_dicThro_M7ACT
+	g_dicThro_M7ACT = {}
+
+	#CDF
+	global g_cdfE2EDelayRaw_M5ACT
+	g_cdfE2EDelayRaw_M5ACT = []
+	global g_cdfE2EDelayRaw_M7ACT
+	g_cdfE2EDelayRaw_M7ACT = []
+	global g_cdfThroRaw_M5ACT
+	g_cdfThroRaw_M5ACT = []
+	global g_cdfThroRaw_M7ACT
+	g_cdfThroRaw_M7ACT = []
+	
 	if directory[len(directory)-1] != '/':
 		directory = directory + '/'
 
