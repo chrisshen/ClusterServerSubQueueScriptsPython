@@ -186,6 +186,13 @@ def mergeMeanAndConfi(inDicMean, inDicConf):
 
 
 def outData(inputDicDataRaw, outputDicMeanData, outputCDF):
+	''' output data, mean and CDF data
+
+	args:
+		inputDicDataRaw (dict): input raw data
+		outputDicMeanData (dict): output mean and confidence interval data
+		outputCDF (list): output CDF data
+	'''	
 	dicVari = {}
 	variCompute(inDic=inputDicDataRaw,
 				inDicMean=outputDicMeanData,
@@ -291,26 +298,26 @@ def processData():
 			outputCDF=g_cdfThroRaw_M6CTR3)
 
 
-	# # Print for debug
-	# print("M3CTR0")
-	# pprint.pprint(g_dicMeanE2E_M3CTR0)
-	# pprint.pprint(g_dicThro_M3CTR0)
+	# Print for debug
+	print("M3CTR0")
+	pprint.pprint(g_dicMeanE2E_M3CTR0)
+	pprint.pprint(g_dicThro_M3CTR0)
 
-	# print("CDF")
-	# pprint.pprint(g_cdfE2EDelayRaw_M3CTR0)
-	# pprint.pprint(g_cdfThroRaw_M3CTR0)
+	print("CDF")
+	pprint.pprint(g_cdfE2EDelayRaw_M3CTR0)
+	pprint.pprint(g_cdfThroRaw_M3CTR0)
 
-	# # print("M3CTR1")
-	# pprint.pprint(g_dicMeanE2E_M3CTR1)
-	# pprint.pprint(g_dicThro_M3CTR1)
+	# print("M3CTR1")
+	pprint.pprint(g_dicMeanE2E_M3CTR1)
+	pprint.pprint(g_dicThro_M3CTR1)
 
-	# print("M3CTR2")
-	# pprint.pprint(g_dicMeanE2E_M3CTR2)
-	# pprint.pprint(g_dicThro_M3CTR2)
+	print("M3CTR2")
+	pprint.pprint(g_dicMeanE2E_M3CTR2)
+	pprint.pprint(g_dicThro_M3CTR2)
 
-	# print("M3CTR3")
-	# pprint.pprint(g_dicMeanE2E_M3CTR3)
-	# pprint.pprint(g_dicThro_M3CTR3)
+	print("M3CTR3")
+	pprint.pprint(g_dicMeanE2E_M3CTR3)
+	pprint.pprint(g_dicThro_M3CTR3)
 
 	# print("M6CTR0")
 	# pprint.pprint(g_dicMeanE2E_M6CTR0)
@@ -328,6 +335,30 @@ def processData():
 	# pprint.pprint(g_dicMeanE2E_M6CTR3)
 	# pprint.pprint(g_dicThro_M6CTR3)
 
+def saveDataToFile(filename, inputDicData):
+	with open(filename, 'w') as f:
+		for key, value in inputDicData.viewitems():
+			ind = len(value)
+			if ind == 2:
+				# key: x point, value[0]: y point, value[1]: error bar
+				f.write(str(key)+' '+str(value[0])+' '+str(value[1])+'\n')
+			elif ind == 1:
+				# key: x point, value[0]: y point
+				f.write(str(key)+' '+str(value[0])+'\n')
+
+def saveCDFDataToFile(filename, inputRawData, inputCDFData):
+	with open(filename, 'w') as f:
+		if len(inputRawData) == len(inputCDFData):
+			for raw, cdf in zip(inputRawData, inputListData):
+				# key: x point, value[0]: y point, value[1]: error bar
+				f.write(str(raw)+' '+str(cdf)+'\n')
+		else:
+			sys.exit("saveCDFDataToFile: two inputs' dimensions are not same")
+
+def saveData(prefix1):
+	prefix0 = 'plotData-'
+	# prefix1 = scheme name
+	
 
 def collectData(directory):
 	# scan the directory to read every data point
