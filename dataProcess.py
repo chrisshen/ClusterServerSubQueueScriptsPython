@@ -770,6 +770,7 @@ def collectData(directory):
 		# print(root, files)
 		for filename in files:
 			with open(root+filename, 'r') as f:
+				print('.', end="")
 				data = json.load(f)
 				
 				mode = data["mode"]
@@ -1411,6 +1412,8 @@ if __name__ == "__main__":
 
 	saveData(prefix1='ESTN', savePath=outputDir)
 
+	print("Process Finished!")
+	print("The data are saved at: " + outputDir)
 
 	# g_dicAllData['g_dicE2EDelayRaw_M3CTR0'] = g_dicE2EDelayRaw_M3CTR0
 	# g_dicAllData['g_dicE2EDelayRaw_M3CTR1'] = g_dicE2EDelayRaw_M3CTR1
