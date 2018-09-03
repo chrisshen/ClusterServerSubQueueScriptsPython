@@ -146,7 +146,8 @@ if __name__ == "__main__":
 	# seed: 0-9
 	seed = 10
 	# arrival rate: 1, 10, 20, 30, 40, 50
-	arrivalRate = 60
+	# arrivalRate = 60
+	arrivalInterval = [1, 3, 5, 7, 9, 11, 13, 15, 20, 30]
 
 	fileName = ''
 	if TLMode == 1:
@@ -159,7 +160,7 @@ if __name__ == "__main__":
 
 	# print format:
 	# $ python2.7 ./run-estn.py --nogui -e 300 -s 1 ...
-	for a in range(0, arrivalRate, 10):
+	for a in arrivalInterval
 		for s in range(0, seed):
 			# create shell script for each parameter
 			if a == 0:
