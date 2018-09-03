@@ -79,6 +79,15 @@ def optionsSet():
 						type="int",
 						default=2)
 
+	# CTT mode in CTR
+	# -1: turn-off
+	# 1: phase-based
+	# 2: direction-based
+	optParser.add_option("--CTTMode",
+						dest="CTTMode",
+						type="int",
+						default=2)
+
 	# CTR Switch Period
 	optParser.add_option("--CTRSwitchPeriod",
 						dest="CTRSwitchPeriod",
@@ -116,6 +125,7 @@ if __name__ == "__main__":
 	global mode
 	global maxSpeed
 	global CTRMode
+	global CTTMode
 	global CTRSwitchPeriod
 	global CTRYLDura
 	global TLMode
@@ -126,6 +136,7 @@ if __name__ == "__main__":
 	mode = options.mode
 	maxSpeed = options.maxSpeed
 	CTRMode = options.CTRMode
+	CTTMode = options.CTTMode
 	CTRSwitchPeriod = options.CTRSwitchPeriod
 	CTRYLDura = options.CTRYLDura
 	TLMode = options.Traffic_Light_Model
@@ -151,7 +162,7 @@ if __name__ == "__main__":
 
 	fileName = ''
 	if TLMode == 1:
-		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(CTRMode)
+		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(CTRMode) +'-CTTMode-'+str(CTTMode)
 	elif TLMode == 2:
 		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
 	elif TLMode == 0:
@@ -160,7 +171,7 @@ if __name__ == "__main__":
 
 	# print format:
 	# $ python2.7 ./run-estn.py --nogui -e 300 -s 1 ...
-	for a in arrivalInterval
+	for a in arrivalInterval:
 		for s in range(0, seed):
 			# create shell script for each parameter
 			if a == 0:
@@ -180,6 +191,7 @@ if __name__ == "__main__":
 			print('-s '+str(s), file=f, end=" ")
 			print('--arrivalRate '+str(a), file=f, end=" ")
 			print('--CTRMode '+str(CTRMode), file=f, end=" ")
+			print('--CTTMode '+str(CTTMode), file=f, end=" ")			
 			print('-T '+str(TLMode), file=f, end=" ")
 			print('-m '+str(mode), file=f)
 			f.close()
