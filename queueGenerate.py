@@ -101,6 +101,18 @@ def optionsSet():
 						type="int",
 						default=2,
 						help='Yellow TL duration When need to swtich TL, defaul is 2')
+	# vehicle injection mode:
+	# 0: no injection
+	# 1: inject vehicles with routes defines in rou.xml file, a route only has one edge
+	# 2: use default route in route file, reroute later for SAINT
+	# 3: inject tic vehicles and traffic flow based on arrival rate
+	# 4: inject only tic vehicles, other traffic flow will from .rou file
+	optParser.add_option("--InjectMode",
+						dest="InjectMode",
+						type="int",
+						default=4,
+						help='Vehicle injection mode: 1, 2, 3, 4')
+
 	options, args = optParser.parse_args()
 	return options
 
@@ -129,6 +141,7 @@ if __name__ == "__main__":
 	global CTRSwitchPeriod
 	global CTRYLDura
 	global TLMode
+	global vehInjectMode
 
 	prefix = options.prefix
 	name = options.name
@@ -140,6 +153,7 @@ if __name__ == "__main__":
 	CTRSwitchPeriod = options.CTRSwitchPeriod
 	CTRYLDura = options.CTRYLDura
 	TLMode = options.Traffic_Light_Model
+	vehInjectMode = options.InjectMode
 
 	s1 = "#!/bin/bash"
 	s2 = "#$ -cwd"
@@ -159,6 +173,7 @@ if __name__ == "__main__":
 	# arrival rate: 1, 10, 20, 30, 40, 50
 	# arrivalRate = 60
 	arrivalInterval = [1, 3, 5, 7, 9, 11, 13, 15, 20, 30]
+	# arrivalInterval = [3, 9, 15, 21, 27, 33, 39, 45, 60, 90]
 
 	fileName = ''
 	if TLMode == 1:
@@ -190,8 +205,9 @@ if __name__ == "__main__":
 			print('-e '+str(simEndTime), file=f, end=" ")
 			print('-s '+str(s), file=f, end=" ")
 			print('--arrivalRate '+str(a), file=f, end=" ")
+			# if TLMode == 1:
 			print('--CTRMode '+str(CTRMode), file=f, end=" ")
-			print('--CTTMode '+str(CTTMode), file=f, end=" ")			
+			print('--CTTMode '+str(CTTMode), file=f, end=" ")
 			print('-T '+str(TLMode), file=f, end=" ")
 			print('-m '+str(mode), file=f)
 			f.close()
