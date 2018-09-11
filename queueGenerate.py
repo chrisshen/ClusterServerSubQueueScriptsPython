@@ -39,6 +39,20 @@ def optionsSet():
 							default="CTR",
 							help="Provide the simulation scheme name.")
 
+	# net file
+	optParser.add_option("-N", "--net-file", 
+							dest="netfile",
+							 default="map/net4x4.test.net.xml",  # map/single-cross.net.xml
+							help="read SUMO network from FILE (mandatory)", 
+							metavar="FILE")
+
+	# SUMO configure file, specifying a net file, an additional file that defines loop detectors and a rou file for traffic routing
+	optParser.add_option("-c", "--cfg-file",
+							dest="cfgfile",
+							default="map/net4x4.test.sumocfg", # map/single-cross.sumocfg
+							help="read SUMO cfg from FILE (mandatory)",
+							metavar="FILE")
+
 	optParser.add_option("-T", 
 							type="int", 
 							dest="Traffic_Light_Model", 
@@ -59,7 +73,7 @@ def optionsSet():
 						dest="mode",
 						default=3,
 						metavar="NUM",
-						help="mode for simulation [default: %default] [0:Dijkstra, 1:CTR, 2:SAINT, 3:SAINT+CTR, 4:Actuated, 5:SAINT+Actuated, 6:Dijkstra+CTR, 7:Dijkstra+Actuated]")
+						help="mode for simulation [default: %default] [0:Dijkstra, 1:CTR, 2:SAINT, 3:SAINT+CTR, 4:Actuated, 5:SAINT+Actuated, 6:Dijkstra+CTR, 7:Dijkstra+Actuated, 8:StaticTL]")
 
 	optParser.add_option("-l", 
 						type="float",
@@ -131,6 +145,9 @@ def headerGenerate(file):
 if __name__ == "__main__":
 	options = optionsSet()
 
+	global netFile
+	global cfgFile
+
 	global prefix
 	global name
 	global simEndTime
@@ -142,6 +159,9 @@ if __name__ == "__main__":
 	global CTRYLDura
 	global TLMode
 	global vehInjectMode
+
+	netFile = options.netfile
+	cfgFile = options.cfgfile
 
 	prefix = options.prefix
 	name = options.name
@@ -169,19 +189,19 @@ if __name__ == "__main__":
 	nogui = '--nogui'
  
 	# seed: 0-9
-	seed = 10
+	seed = 1
 	# arrival rate: 1, 10, 20, 30, 40, 50
 	# arrivalRate = 60
-	arrivalInterval = [1, 3, 5, 7, 9, 11, 13, 15, 20, 30]
-	# arrivalInterval = [3, 9, 15, 21, 27, 33, 39, 45, 60, 90]
+	# arrivalInterval = [1, 3, 5, 7, 9, 11, 13, 15, 20, 30]
+	arrivalInterval = [3, 9, 15, 21, 27, 33, 39, 45, 60, 90]
 
 	fileName = ''
 	if TLMode == 1:
-		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(CTRMode) +'-CTTMode-'+str(CTTMode)
+		fileName = str(prefix)+'-m-'+str(mode)+'-'+str(name)+'-'+str(CTRMode) +'-CTTMode-'+str(CTTMode)
 	elif TLMode == 2:
-		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
+		fileName = str(prefix)+'-m-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
 	elif TLMode == 0:
-		fileName = str(prefix)+'-mode-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
+		fileName = str(prefix)+'-m-'+str(mode)+'-'+str(name)+'-'+str(TLMode)
 	fullFileName = os.path.join(savePath, fileName)
 
 	# print format:
@@ -208,6 +228,10 @@ if __name__ == "__main__":
 			# if TLMode == 1:
 			print('--CTRMode '+str(CTRMode), file=f, end=" ")
 			print('--CTTMode '+str(CTTMode), file=f, end=" ")
+			print('--InjectMode '+str(vehInjectMode), file=f, end=" ")
+			if vehInjectMode == 0:
+				print('-n '+str(netFile), file=f, end=" ")
+				print('-c '+str(cfgFile), file=f, end=" ")
 			print('-T '+str(TLMode), file=f, end=" ")
 			print('-m '+str(mode), file=f)
 			f.close()
