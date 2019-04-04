@@ -161,9 +161,11 @@ def variCompute(inDic, inDicMean, retDic):
 			for value in valList:
 				sum_var = sum_var + pow(value-inDicMean.get(key)[0], 2)
 
-			# print(valList)
-			vari = sum_var / (len(valList)-1)
-
+			if len(valList) > 1:
+				# print(valList)
+				vari = sum_var / (len(valList)-1)
+			else:
+				vari = 0
 			retDic[key] = vari
 
 def confCompute(inDic, inVari, retDic):
@@ -357,7 +359,7 @@ def processData():
 			outputDicMeanData=g_dicThro_M1CTR0,
 			outputCDF=g_cdfThroRaw_M1CTR0)
 
-	# M3CTR1
+	# M1CTR1
 	# E2E TT
 	outData(inputDicDataRaw=g_dicE2EDelayRaw_M1CTR1,
 			outputDicMeanData=g_dicMeanE2E_M1CTR1,
@@ -367,7 +369,7 @@ def processData():
 			outputDicMeanData=g_dicThro_M1CTR1,
 			outputCDF=g_cdfThroRaw_M1CTR1)
 
-	# M3CTR2
+	# M1CTR2
 	# E2E TT
 	outData(inputDicDataRaw=g_dicE2EDelayRaw_M1CTR2,
 			outputDicMeanData=g_dicMeanE2E_M1CTR2,
@@ -377,7 +379,7 @@ def processData():
 			outputDicMeanData=g_dicThro_M1CTR2,
 			outputCDF=g_cdfThroRaw_M1CTR2)
 
-	# M3CTR3
+	# M1CTR3
 	# E2E TT
 	outData(inputDicDataRaw=g_dicE2EDelayRaw_M1CTR3,
 			outputDicMeanData=g_dicMeanE2E_M1CTR3,
@@ -416,6 +418,46 @@ def processData():
 	outData(inputDicDataRaw=g_dicThroRaw_M9ACT,
 			outputDicMeanData=g_dicThro_M9ACT,
 			outputCDF=g_cdfThroRaw_M9ACT)
+
+	# M10CTR0
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M10CTR0,
+			outputDicMeanData=g_dicMeanE2E_M10CTR0,
+			outputCDF=g_cdfE2EDelayRaw_M10CTR0)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M10CTR0,
+			outputDicMeanData=g_dicThro_M10CTR0,
+			outputCDF=g_cdfThroRaw_M10CTR0)
+
+	# M10CTR1
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M10CTR1,
+			outputDicMeanData=g_dicMeanE2E_M10CTR1,
+			outputCDF=g_cdfE2EDelayRaw_M10CTR1)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M10CTR1,
+			outputDicMeanData=g_dicThro_M10CTR1,
+			outputCDF=g_cdfThroRaw_M10CTR1)
+
+	# M10CTR2
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M10CTR2,
+			outputDicMeanData=g_dicMeanE2E_M10CTR2,
+			outputCDF=g_cdfE2EDelayRaw_M10CTR2)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M10CTR2,
+			outputDicMeanData=g_dicThro_M10CTR2,
+			outputCDF=g_cdfThroRaw_M10CTR2)
+
+	# M10CTR3
+	# E2E TT
+	outData(inputDicDataRaw=g_dicE2EDelayRaw_M10CTR3,
+			outputDicMeanData=g_dicMeanE2E_M10CTR3,
+			outputCDF=g_cdfE2EDelayRaw_M10CTR3)
+	# Throughput
+	outData(inputDicDataRaw=g_dicThroRaw_M10CTR3,
+			outputDicMeanData=g_dicThro_M10CTR3,
+			outputCDF=g_cdfThroRaw_M10CTR3)
 
 	# # Print for debug
 	# print("M3CTR0")
@@ -1013,6 +1055,108 @@ def saveData(prefix1, savePath):
 			filename = prefix0+prefix1+g_dicThroRaw_M9ACT['filename']
 		filename = savePath+filename
 		saveCDFDataToFile(filename, g_cdfThroRaw_M9ACT)
+
+	# CTR, M = 10
+	# E2E
+	if g_dicMeanE2E_M10CTR0:
+		if g_dicMeanE2E_M10CTR0.has_key('filename'):
+			filename = prefix0+prefix1+g_dicMeanE2E_M10CTR0['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicMeanE2E_M10CTR0)
+
+	if g_dicMeanE2E_M10CTR1:
+		if g_dicMeanE2E_M10CTR1.has_key('filename'):
+			filename = prefix0+prefix1+g_dicMeanE2E_M10CTR1['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicMeanE2E_M10CTR1)
+
+	if g_dicMeanE2E_M10CTR2:
+		if g_dicMeanE2E_M10CTR2.has_key('filename'):
+			filename = prefix0+prefix1+g_dicMeanE2E_M10CTR2['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicMeanE2E_M10CTR2)
+
+	if g_dicMeanE2E_M10CTR3:
+		if g_dicMeanE2E_M10CTR3.has_key('filename'):
+			filename = prefix0+prefix1+g_dicMeanE2E_M10CTR3['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicMeanE2E_M10CTR3)
+
+	# Througput
+	if g_dicThro_M10CTR0:
+		if g_dicThro_M10CTR0.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThro_M10CTR0['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicThro_M10CTR0)
+
+	if g_dicThro_M10CTR1:
+		if g_dicThro_M10CTR1.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThro_M10CTR1['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicThro_M10CTR1)
+
+	if g_dicThro_M10CTR2:
+		if g_dicThro_M10CTR2.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThro_M10CTR2['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicThro_M10CTR2)
+
+	if g_dicThro_M10CTR3:
+		if g_dicThro_M10CTR3.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThro_M10CTR3['filename']
+		filename = savePath+filename
+		saveDataToFile(filename, g_dicThro_M10CTR3)
+
+	#cdf E2E 
+	if g_cdfE2EDelayRaw_M10CTR0:
+		if g_dicE2EDelayRaw_M10CTR0.has_key('filename'):
+			filename = prefix0+prefix1+g_dicE2EDelayRaw_M10CTR0['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfE2EDelayRaw_M10CTR0)
+
+	if g_cdfE2EDelayRaw_M10CTR1:
+		if g_dicE2EDelayRaw_M10CTR1.has_key('filename'):
+			filename = prefix0+prefix1+g_dicE2EDelayRaw_M10CTR1['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfE2EDelayRaw_M10CTR1)
+
+	if g_cdfE2EDelayRaw_M10CTR2:
+		if g_dicE2EDelayRaw_M10CTR2.has_key('filename'):
+			filename = prefix0+prefix1+g_dicE2EDelayRaw_M10CTR2['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfE2EDelayRaw_M10CTR2)
+
+	if g_cdfE2EDelayRaw_M10CTR3:
+		if g_dicE2EDelayRaw_M10CTR3.has_key('filename'):
+			filename = prefix0+prefix1+g_dicE2EDelayRaw_M10CTR3['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfE2EDelayRaw_M10CTR3)
+
+	# CDF Throughput
+	if g_cdfThroRaw_M10CTR0:
+		if g_dicThroRaw_M10CTR0.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThroRaw_M10CTR0['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfThroRaw_M10CTR0)
+
+	if g_cdfThroRaw_M10CTR1:
+		if g_dicThroRaw_M10CTR1.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThroRaw_M10CTR1['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfThroRaw_M10CTR1)
+
+	if g_cdfThroRaw_M10CTR2:
+		if g_dicThroRaw_M10CTR2.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThroRaw_M10CTR2['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfThroRaw_M10CTR2)
+
+	if g_cdfThroRaw_M10CTR3:
+		if g_dicThroRaw_M10CTR3.has_key('filename'):
+			filename = prefix0+prefix1+g_dicThroRaw_M10CTR3['filename']
+		filename = savePath+filename
+		saveCDFDataToFile(filename, g_cdfThroRaw_M10CTR3)
+
 
 def collectData(directory):
 	# scan the directory to read every data point
@@ -1714,6 +1858,151 @@ def collectData(directory):
 										TLMode=TLMode, 
 										targetDic=g_dicThro_M9ACT)
 
+
+				elif mode == 10:
+					if CTRMode == 0:
+						# dicE2EDelayRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=g_dicE2EDelayRaw_M10CTR0)
+
+						writeFilename(peType='cdfE2E', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicE2EDelayRaw_M10CTR0)
+
+						# dicThroughputRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=g_dicThroRaw_M10CTR0)
+
+						writeFilename(peType='cdfThro', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThroRaw_M10CTR0)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M10CTR0, 
+									retDic=g_dicMeanE2E_M10CTR0)
+
+						writeFilename(peType='meanE2E', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicMeanE2E_M10CTR0)						
+						meanCompute(inputDic=g_dicThroRaw_M10CTR0, 
+									retDic=g_dicThro_M10CTR0)
+
+						writeFilename(peType='meanThro', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThro_M10CTR0)
+
+					elif CTRMode == 1:
+						# dicE2EDelayRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=g_dicE2EDelayRaw_M10CTR1)
+
+						writeFilename(peType='cdfE2E', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicE2EDelayRaw_M10CTR1)
+
+						# dicThroughputRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=g_dicThroRaw_M10CTR1)
+
+						writeFilename(peType='cdfThro', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThroRaw_M10CTR1)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M10CTR1, 
+									retDic=g_dicMeanE2E_M10CTR1)
+
+						writeFilename(peType='meanE2E', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicMeanE2E_M10CTR1)						
+						meanCompute(inputDic=g_dicThroRaw_M10CTR1, 
+									retDic=g_dicThro_M10CTR1)
+
+						writeFilename(peType='meanThro', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThro_M10CTR1)
+
+					elif CTRMode == 2:					
+						# dicE2EDelayRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=g_dicE2EDelayRaw_M10CTR2)
+
+						writeFilename(peType='cdfE2E', mode=mode, 
+										CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicE2EDelayRaw_M10CTR2)
+
+						# dicThroughputRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=g_dicThroRaw_M10CTR2)
+
+						writeFilename(peType='cdfThro', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThroRaw_M10CTR2)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M10CTR2, 
+									retDic=g_dicMeanE2E_M10CTR2)
+
+						writeFilename(peType='meanE2E', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicMeanE2E_M10CTR2)						
+						meanCompute(inputDic=g_dicThroRaw_M10CTR2, 
+									retDic=g_dicThro_M10CTR2)
+
+						writeFilename(peType='meanThro', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThro_M10CTR2)
+
+					elif CTRMode == 3:					
+						# dicE2EDelayRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["meanE2EDelay"], 
+								targetDic=g_dicE2EDelayRaw_M10CTR3)
+
+						writeFilename(peType='cdfE2E', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicE2EDelayRaw_M10CTR3)
+
+						# dicThroughputRaw = {}
+						readData(xAxis=data["arrivalRate"], 
+								yAxisDataPoint=data["throughput"], 
+								targetDic=g_dicThroRaw_M10CTR3)
+
+						writeFilename(peType='cdfThro', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThroRaw_M10CTR3)
+
+						meanCompute(inputDic=g_dicE2EDelayRaw_M10CTR3, 
+									retDic=g_dicMeanE2E_M10CTR3)
+
+						writeFilename(peType='meanE2E', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicMeanE2E_M10CTR3)						
+						meanCompute(inputDic=g_dicThroRaw_M10CTR3, 
+									retDic=g_dicThro_M10CTR3)
+
+						writeFilename(peType='meanThro', 
+										mode=mode, CTRMode=CTRMode, 
+										TLMode=TLMode, 
+										targetDic=g_dicThro_M10CTR3)
 if __name__ == "__main__":
 	options = optionsSet()
 	directory = options.directory
@@ -1908,8 +2197,8 @@ if __name__ == "__main__":
 	########################################
 	# Single-cross
 	########################################
+	#M1
 	#E2E delay
-	#M3
 	global g_dicE2EDelayRaw_M1CTR0
 	g_dicE2EDelayRaw_M1CTR0={}
 	global g_dicMeanE2E_M1CTR0
@@ -1968,7 +2257,71 @@ if __name__ == "__main__":
 	global g_cdfThroRaw_M1CTR3
 	g_cdfThroRaw_M1CTR3 = []
 
+	# 
+	# M10
+	# E2E delay
+	global g_dicE2EDelayRaw_M10CTR0
+	g_dicE2EDelayRaw_M10CTR0={}
+	global g_dicMeanE2E_M10CTR0
+	g_dicMeanE2E_M10CTR0 = {}
+
+	global g_dicE2EDelayRaw_M10CTR1
+	g_dicE2EDelayRaw_M10CTR1={}
+	global g_dicMeanE2E_M10CTR1
+	g_dicMeanE2E_M10CTR1 = {}
+
+	global g_dicE2EDelayRaw_M10CTR2
+	g_dicE2EDelayRaw_M10CTR2={}
+	global g_dicMeanE2E_M10CTR2
+	g_dicMeanE2E_M10CTR2 = {}
+
+	global g_dicE2EDelayRaw_M10CTR3
+	g_dicE2EDelayRaw_M10CTR3={}	
+	global g_dicMeanE2E_M10CTR3
+	g_dicMeanE2E_M10CTR3 = {}
+
+	#CDF
+	global g_cdfE2EDelayRaw_M10CTR0
+	g_cdfE2EDelayRaw_M10CTR0 = []
+	global g_cdfE2EDelayRaw_M10CTR1
+	g_cdfE2EDelayRaw_M10CTR1 = []
+	global g_cdfE2EDelayRaw_M10CTR2
+	g_cdfE2EDelayRaw_M10CTR2 = []
+	global g_cdfE2EDelayRaw_M10CTR3
+	g_cdfE2EDelayRaw_M10CTR3 =[]
+
+	# Throughput
+	global g_dicThroRaw_M10CTR0
+	g_dicThroRaw_M10CTR0={}
+	global g_dicThro_M10CTR0
+	g_dicThro_M10CTR0 = {}
+	global g_dicThroRaw_M10CTR1
+	g_dicThroRaw_M10CTR1={}	
+	global g_dicThro_M10CTR1
+	g_dicThro_M10CTR1 = {}
+	global g_dicThroRaw_M10CTR2
+	g_dicThroRaw_M10CTR2={}
+	global g_dicThro_M10CTR2
+	g_dicThro_M10CTR2 = {}
+	global g_dicThroRaw_M10CTR3
+	g_dicThroRaw_M10CTR3={}
+	global g_dicThro_M10CTR3
+	g_dicThro_M10CTR3 = {}
+
+	# CDF
+	global g_cdfThroRaw_M10CTR0
+	g_cdfThroRaw_M10CTR0 = []
+	global g_cdfThroRaw_M10CTR1
+	g_cdfThroRaw_M10CTR1 = []
+	global g_cdfThroRaw_M10CTR2
+	g_cdfThroRaw_M10CTR2 = []
+	global g_cdfThroRaw_M10CTR3
+	g_cdfThroRaw_M10CTR3 = []
+
+
+	# 
 	# Actuated
+	# 
 	global g_dicE2EDelayRaw_M4ACT
 	g_dicE2EDelayRaw_M4ACT={}
 	global g_dicMeanE2E_M4ACT
@@ -2032,76 +2385,3 @@ if __name__ == "__main__":
 
 	print("Process Finished!")
 	print("The data are saved at: " + outputDir)
-
-	# g_dicAllData['g_dicE2EDelayRaw_M3CTR0'] = g_dicE2EDelayRaw_M3CTR0
-	# g_dicAllData['g_dicE2EDelayRaw_M3CTR1'] = g_dicE2EDelayRaw_M3CTR1
-	# g_dicAllData['g_dicE2EDelayRaw_M3CTR2'] = g_dicE2EDelayRaw_M3CTR2
-	# g_dicAllData['g_dicE2EDelayRaw_M3CTR3'] = g_dicE2EDelayRaw_M3CTR3
-	# g_dicAllData['g_dicE2EDelayRaw_M6CTR0'] = g_dicE2EDelayRaw_M6CTR0
-	# g_dicAllData['g_dicE2EDelayRaw_M6CTR1'] = g_dicE2EDelayRaw_M6CTR1
-	# g_dicAllData['g_dicE2EDelayRaw_M6CTR2'] = g_dicE2EDelayRaw_M6CTR2
-	# g_dicAllData['g_dicE2EDelayRaw_M6CTR3'] = g_dicE2EDelayRaw_M6CTR3
-
-	# g_dicAllData['g_dicMeanE2E_M3CTR0'] = g_dicMeanE2E_M3CTR0
-	# g_dicAllData['g_dicMeanE2E_M3CTR1'] = g_dicMeanE2E_M3CTR1
-	# g_dicAllData['g_dicMeanE2E_M3CTR2'] = g_dicMeanE2E_M3CTR2
-	# g_dicAllData['g_dicMeanE2E_M3CTR3'] = g_dicMeanE2E_M3CTR3
-	# g_dicAllData['g_dicMeanE2E_M6CTR0'] = g_dicMeanE2E_M6CTR0
-	# g_dicAllData['g_dicMeanE2E_M6CTR1'] = g_dicMeanE2E_M6CTR1
-	# g_dicAllData['g_dicMeanE2E_M6CTR2'] = g_dicMeanE2E_M6CTR2
-	# g_dicAllData['g_dicMeanE2E_M6CTR3'] = g_dicMeanE2E_M6CTR3
-
-	# g_dicAllData['g_cdfE2EDelayRaw_M3CTR0'] = g_cdfE2EDelayRaw_M3CTR0
-	# g_dicAllData['g_cdfE2EDelayRaw_M3CTR1'] = g_cdfE2EDelayRaw_M3CTR1
-	# g_dicAllData['g_cdfE2EDelayRaw_M3CTR2'] = g_cdfE2EDelayRaw_M3CTR2
-	# g_dicAllData['g_cdfE2EDelayRaw_M3CTR3'] = g_cdfE2EDelayRaw_M3CTR3
-	# g_dicAllData['g_cdfE2EDelayRaw_M6CTR0'] = g_cdfE2EDelayRaw_M6CTR0
-	# g_dicAllData['g_cdfE2EDelayRaw_M6CTR1'] = g_cdfE2EDelayRaw_M6CTR1
-	# g_dicAllData['g_cdfE2EDelayRaw_M6CTR2'] = g_cdfE2EDelayRaw_M6CTR2
-	# g_dicAllData['g_cdfE2EDelayRaw_M6CTR3'] = g_cdfE2EDelayRaw_M6CTR3
-
-
-	# g_dicAllData['g_dicThroRaw_M3CTR0'] = g_dicThroRaw_M3CTR0
-	# g_dicAllData['g_dicThroRaw_M3CTR1'] = g_dicThroRaw_M3CTR1
-	# g_dicAllData['g_dicThroRaw_M3CTR2'] = g_dicThroRaw_M3CTR2
-	# g_dicAllData['g_dicThroRaw_M3CTR3'] = g_dicThroRaw_M3CTR3
-	# g_dicAllData['g_dicThroRaw_M6CTR0'] = g_dicThroRaw_M6CTR0
-	# g_dicAllData['g_dicThroRaw_M6CTR1'] = g_dicThroRaw_M6CTR1
-	# g_dicAllData['g_dicThroRaw_M6CTR2'] = g_dicThroRaw_M6CTR2
-	# g_dicAllData['g_dicThroRaw_M6CTR3'] = g_dicThroRaw_M6CTR3
-
-	# g_dicAllData['g_dicThro_M3CTR0'] = g_dicThro_M3CTR0
-	# g_dicAllData['g_dicThro_M3CTR1'] = g_dicThro_M3CTR1
-	# g_dicAllData['g_dicThro_M3CTR2'] = g_dicThro_M3CTR2
-	# g_dicAllData['g_dicThro_M3CTR3'] = g_dicThro_M3CTR3
-	# g_dicAllData['g_dicThro_M6CTR0'] = g_dicThro_M6CTR0
-	# g_dicAllData['g_dicThro_M6CTR1'] = g_dicThro_M6CTR1
-	# g_dicAllData['g_dicThro_M6CTR2'] = g_dicThro_M6CTR3
-	# g_dicAllData['g_dicThro_M6CTR3'] = g_dicThro_M6CTR3
-
-	# g_dicAllData['g_cdfThroRaw_M3CTR0'] = g_cdfThroRaw_M3CTR0
-	# g_dicAllData['g_cdfThroRaw_M3CTR1'] = g_cdfThroRaw_M3CTR1
-	# g_dicAllData['g_cdfThroRaw_M3CTR2'] = g_cdfThroRaw_M3CTR2
-	# g_dicAllData['g_cdfThroRaw_M3CTR3'] = g_cdfThroRaw_M3CTR3
-	# g_dicAllData['g_cdfThroRaw_M6CTR0'] = g_cdfThroRaw_M6CTR0
-	# g_dicAllData['g_cdfThroRaw_M6CTR1'] = g_cdfThroRaw_M6CTR1
-	# g_dicAllData['g_cdfThroRaw_M6CTR2'] = g_cdfThroRaw_M6CTR2
-	# g_dicAllData['g_cdfThroRaw_M6CTR3'] = g_cdfThroRaw_M6CTR3
-
-
-	# g_dicAllData['g_dicE2EDelayRaw_M5ACT'] = g_dicE2EDelayRaw_M5ACT
-	# g_dicAllData['g_dicE2EDelayRaw_M7ACT'] = g_dicE2EDelayRaw_M7ACT
-
-	# g_dicAllData['g_dicMeanE2E_M5ACT'] = g_dicMeanE2E_M5ACT
-	# g_dicAllData['g_dicMeanE2E_M7ACT'] = g_dicMeanE2E_M7ACT
-
-	# g_dicAllData['g_dicThroRaw_M5ACT'] = g_dicThroRaw_M5ACT
-	# g_dicAllData['g_dicThroRaw_M7ACT'] = g_dicThroRaw_M7ACT
-
-	# g_dicAllData['g_dicThro_M5ACT'] = g_dicThro_M5ACT
-	# g_dicAllData['g_dicThro_M7ACT'] = g_dicThro_M7ACT
-
-	# g_dicAllData['g_cdfE2EDelayRaw_M5ACT'] = g_cdfE2EDelayRaw_M5ACT
-	# g_dicAllData['g_cdfE2EDelayRaw_M7ACT'] = g_cdfE2EDelayRaw_M7ACT
-	# g_dicAllData['g_cdfThroRaw_M5ACT'] = g_cdfThroRaw_M5ACT
-	# g_dicAllData['g_cdfThroRaw_M7ACT'] = g_cdfThroRaw_M7ACT

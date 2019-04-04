@@ -73,7 +73,7 @@ def optionsSet():
 						dest="mode",
 						default=3,
 						metavar="NUM",
-						help="mode for simulation [default: %default] [0:Dijkstra, 1:CTR, 2:SAINT, 3:SAINT+CTR, 4:Actuated, 5:SAINT+Actuated, 6:Dijkstra+CTR, 7:Dijkstra+Actuated, 8:StaticTL]")
+						help="mode for simulation [default: %default] [0:Dijkstra, 1:CTR, 2:SAINT, 3:SAINT+CTR, 4:Actuated, 5:SAINT+Actuated, 6:Dijkstra+CTR, 7:Dijkstra+Actuated, 8:StaticTL, 9:ActuatedY, 10:new-CTR]")
 
 	optParser.add_option("-l", 
 						type="float",
@@ -125,7 +125,15 @@ def optionsSet():
 						dest="InjectMode",
 						type="int",
 						default=4,
-						help='Vehicle injection mode: 1, 2, 3, 4')
+						help='Vehicle injection mode: 0, 1, 2, 3, 4')
+
+	# arrival rate of each injection edge
+	# the actual information is vehicle arrival interval
+	optParser.add_option("--epsilon",
+						dest="epsilon",
+						type="float",
+						default=0.5,
+						help='Tolerant value for CTT')
 
 	options, args = optParser.parse_args()
 	return options
@@ -193,7 +201,8 @@ if __name__ == "__main__":
 	# arrival rate: 1, 10, 20, 30, 40, 50
 	# arrivalRate = 60
 	# arrivalInterval = [1, 3, 5, 7, 9, 11, 13, 15, 20, 30]
-	arrivalInterval = [3, 9, 15, 21, 27, 33, 39, 45, 60, 90]
+	# arrivalInterval = [3, 9, 15, 21, 27, 33, 39, 45, 60, 90]
+	arrivalInterval = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 
 	fileName = ''
 	if TLMode == 1:
@@ -229,6 +238,9 @@ if __name__ == "__main__":
 			print('--CTRMode '+str(CTRMode), file=f, end=" ")
 			print('--CTTMode '+str(CTTMode), file=f, end=" ")
 			print('--InjectMode '+str(vehInjectMode), file=f, end=" ")
+			print('--CTRSwitchPeriod '+str(CTRSwitchPeriod), file=f, end=" ")
+			print('--CTRYLDura '+str(CTRYLDura), file=f, end=" ")
+
 			if vehInjectMode == 0:
 				print('-n '+str(netFile), file=f, end=" ")
 				print('-c '+str(cfgFile), file=f, end=" ")
