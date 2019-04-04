@@ -132,11 +132,15 @@ def readData(xAxis, yAxisDataPoint, targetDic):
 		targetDic (dict): 
 	'''
 	key = xAxis
-	valEle = float(yAxisDataPoint)
+	valEle = 0
+	if yAxisDataPoint:
+		valEle = float(yAxisDataPoint)
 	if targetDic.has_key(key):
-		targetDic[key].append(valEle)
+		if valEle:
+			targetDic[key].append(valEle)
 	else:
-		targetDic[key]=[valEle]
+		if valEle:
+			targetDic[key]=[valEle]
 
 
 def readRawData(xAxis, yAxisDataPoint, targetDic):
@@ -378,6 +382,7 @@ def collectData(directory):
 				print(schemeName, mode, xAxisValue, seed)
 
 				delayDataRowInd = -1
+				delayDataRow = []
 				csvreader=csv.reader(csvf)
 				for indRow, row in enumerate(csvreader):
 					print(row)
@@ -409,26 +414,27 @@ def collectData(directory):
 									yAxisDataPoint=row[ind+1], 
 									targetDic=g_dicPDRRaw_BGTI)
 
-						# elif ele == 'MaxE2Edelay':
 						elif ele == 'maxE2EDelay': 
 
 							readData(xAxis=xAxisValue, 
 									yAxisDataPoint=row[ind+1], 
 									targetDic=g_dicMaxE2ERaw_BGTI)
 
-						# elif ele == 'MeanE2Edelay': 
-						elif ele == 'meanE2EDelay': 
+						# elif ele == 'meanE2EDelay': 
 
-							readData(xAxis=xAxisValue, 
-									yAxisDataPoint=row[ind+1], 
-									targetDic=g_dicMeanE2ERaw_BGTI)
+						# 	readData(xAxis=xAxisValue, 
+						# 			yAxisDataPoint=row[ind+1], 
+						# 			targetDic=g_dicMeanE2ERaw_BGTI)
 
 					if row[0] == "E2E Delay":
 						delayDataRowInd = indRow+1
+					if delayDataRowInd != -1:
+						delayDataRow = row
+
 				if delayDataRowInd != -1:
-					for ind, ele in enumerate(csvreader[delayDataRowInd]):
+					for ind, ele in enumerate(delayDataRow):
 						readData(xAxis=xAxisValue, 
-								yAxisDataPoint=csvreader[delayDataRowInd][ind], 
+								yAxisDataPoint=ele, 
 								targetDic=g_dicMeanE2ERaw_BGTI)
 
 	meanCompute(inputDic=g_dicPDRRaw_BGTI, 
