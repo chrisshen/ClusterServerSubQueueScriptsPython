@@ -24,8 +24,8 @@ import optparse
 # import subprocess
 # import random
 # import time
-import numpy as np 
-import matplotlib.pyplot as plt
+# import numpy as np 
+# import matplotlib.pyplot as plt
 
 # pretty printer
 import pprint
@@ -41,6 +41,10 @@ import csv
 
 # for parsing XML
 # import xml.etree.ElementTree as ET
+
+from ReadFile import ReadFile
+
+DEBUG = True
 
 def optionsSet():
 	optParser = optparse.OptionParser()
@@ -263,19 +267,10 @@ def processData():
 		retDic (dict): return confience interval data
 	'''	
 
-	# M3CTR0
 	# PDR
-	outData(inputDicDataRaw=g_dicPDRRaw_BGTI,
-			outputDicMeanData=g_dicMeanPDR_BGTI,
-			outputCDF=g_cdfPDR_BGTI)
-	# mean
-	outData(inputDicDataRaw=g_dicMeanE2ERaw_BGTI,
-			outputDicMeanData=g_dicMeanE2E_BGTI,
-			outputCDF=g_cdfMeanE2E_BGTI)
-	# max
-	outData(inputDicDataRaw=g_dicMaxE2ERaw_BGTI,
-			outputDicMeanData=g_dicMeanMaxE2E_BGTI,
-			outputCDF=g_cdfMaxE2E_BGTI)
+	outData(inputDicDataRaw=g_dicInputData,
+			outputDicMeanData=g_dicMeanData,
+			outputCDF=g_cdfData)
 
 	# # Print for debug
 	# print("M3CTR0")
@@ -321,133 +316,19 @@ def saveData(prefix1, savePath):
 		savePath = savePath + '/'
 	
 	filename = ''
-	
-	# CTR, M = 3 and 6
-	# E2E
 
-	if g_dicMeanPDR_BGTI:
-		if g_dicMeanPDR_BGTI.has_key('filename'):
-			filename = prefix0+prefix1+g_dicMeanPDR_BGTI['filename']
-		filename = savePath+filename
-		saveDataToFile(filename, g_dicMeanPDR_BGTI)
+	if g_dicMeanData:
+		# if g_dicMeanData.has_key('filename'):
+		filename = prefix0+prefix1
+		filename = savePath+filename+'-output'
+		saveDataToFile(filename, g_dicMeanData)
 
-	if g_dicMeanE2E_BGTI:
-		if g_dicMeanE2E_BGTI.has_key('filename'):
-			filename = prefix0+prefix1+g_dicMeanE2E_BGTI['filename']
-		filename = savePath+filename
-		saveDataToFile(filename, g_dicMeanE2E_BGTI)
-
-	if g_dicMeanMaxE2E_BGTI:
-		if g_dicMeanMaxE2E_BGTI.has_key('filename'):
-			filename = prefix0+prefix1+g_dicMeanMaxE2E_BGTI['filename']
-		filename = savePath+filename
-		saveDataToFile(filename, g_dicMeanMaxE2E_BGTI)
-			
-	#cdf E2E 
-	if g_cdfPDR_BGTI:
-		if g_dicPDRRaw_BGTI.has_key('filename'):
-			filename = prefix0+prefix1+g_dicPDRRaw_BGTI['filename']
-		filename = savePath+filename
-		saveCDFDataToFile(filename, g_cdfPDR_BGTI)
-
-	if g_cdfMeanE2E_BGTI:
-		if g_dicMeanE2ERaw_BGTI.has_key('filename'):
-			filename = prefix0+prefix1+g_dicMeanE2ERaw_BGTI['filename']
-		filename = savePath+filename
-		saveCDFDataToFile(filename, g_cdfMeanE2E_BGTI)
-
-	if g_cdfMaxE2E_BGTI:
-		if g_dicMaxE2ERaw_BGTI.has_key('filename'):
-			filename = prefix0+prefix1+g_dicMaxE2ERaw_BGTI['filename']
-		filename = savePath+filename
-		saveCDFDataToFile(filename, g_cdfMaxE2E_BGTI)
 
 def collectData(directory):
 
 	mode = ''
 	global schemeName
-	# scan the directory to read every data point
-	for root, dirs, files in os.walk(directory):
-		# print(root, files)
-		for filename in files:
-			# e.g., EDCA-s1Persis-BGTI-0.010-s-9.csv
-			fnSplitList=filename.split('-')
 
-			with open(root+filename, 'r') as csvf:
-				print('.', end="")
-
-				# bBGTI=False
-				xAxisValue=0.0
-				seed=-1
-				# density=0.0
-				# preprocess of prefix and parameters by file name
-				# e.g., EDCA-s1Persis-BGTI-0.010-s-9.csv
-				# ['EDCA', 's1Persis', 'BGTI', '0.020', 's', '2.csv']
-				# schemeName = fnSplitList[1]
-				# mode = fnSplitList[2]
-				# xAxisValue = float(fnSplitList[3])
-				# seed = int(fnSplitList[5].split('.')[0])
-				# print(schemeName, mode, xAxisValue, seed)
-
-				delayDataRowInd = -1
-				delayDataRow = []
-				csvreader=csv.reader(csvf)
-				for indRow, row in enumerate(csvreader):
-					print(row)
-					for ind, ele in enumerate(row):
-						# prefix discovery 
-						if ele == 'scheme':
-							schemeName = row[ind+1]
-						
-						if ele == 'seed':
-							seed = int(row[ind+1])
-
-						if ele == 'BGTI' and float(row[ind+1]):
-							if xaxis == ele:
-								# bBGTI = True
-								mode = ele
-								xAxisValue = float(row[ind+1])
-							
-						if ele == 'density' and float(row[ind+1]):
-							if xaxis == ele:
-								mode = ele
-								xAxisValue = float(row[ind+1]) * 0.01
-
-
-						# if ele == 'pktSendInterval':
-						# 	mode = ele
-						# 	xAxisValue = float(row[ind+1])
-
-						# Data collection
-						# elif ele == 'SuccessfulRatio': # PDR
-						if ele == 'PDR': # PDR
-
-							readData(xAxis=xAxisValue, 
-									yAxisDataPoint=row[ind+1], 
-									targetDic=g_dicPDRRaw_BGTI)
-
-						if ele == 'maxE2EDelay': 
-
-							readData(xAxis=xAxisValue, 
-									yAxisDataPoint=row[ind+1], 
-									targetDic=g_dicMaxE2ERaw_BGTI)
-
-						if ele == 'meanE2EDelay': 
-
-							readData(xAxis=xAxisValue, 
-									yAxisDataPoint=row[ind+1], 
-									targetDic=g_dicMeanE2ERaw_BGTI)
-
-					# if row[0] == "E2E Delay":
-					# 	delayDataRowInd = indRow+1
-					# if delayDataRowInd != -1:
-					# 	delayDataRow = row
-
-				if delayDataRowInd != -1:
-					for ind, ele in enumerate(delayDataRow):
-						readData(xAxis=xAxisValue, 
-								yAxisDataPoint=ele, 
-								targetDic=g_dicMeanE2ERaw_BGTI)
 
 	meanCompute(inputDic=g_dicPDRRaw_BGTI, 
 				retDic=g_dicMeanPDR_BGTI)
@@ -484,53 +365,43 @@ def collectData(directory):
 
 if __name__ == "__main__":
 	options = optionsSet()
-	directory = options.directory
+	filePath = options.directory
 	outputDir = options.outputDir
 
-	global schemeName
-	schemeName = ''
 
 	global xaxis;
 	xaxis = options.xaxis
 
+	# if directory[len(directory)-1] != '/':
+	# 	directory = directory + '/'
+
+	# print("Scan:", directory)
+	
 	# raw
-	global g_dicPDRRaw_BGTI
-	g_dicPDRRaw_BGTI={}
-	global g_dicMeanE2ERaw_BGTI
-	g_dicMeanE2ERaw_BGTI={}
-	global g_dicMaxE2ERaw_BGTI
-	g_dicMaxE2ERaw_BGTI={}
+	global g_dicData
+	g_dicInputData={}
 
-	# mean
-	global g_dicMeanPDR_BGTI
-	g_dicMeanPDR_BGTI={}
-	global g_dicMeanE2E_BGTI
-	g_dicMeanE2E_BGTI={}
-	global g_dicMeanMaxE2E_BGTI
-	g_dicMeanMaxE2E_BGTI={}
+	readFile = ReadFile()
 
-	# CDF
-	global g_cdfPDRRaw_BGTI
-	g_cdfPDRRaw_BGTI = []
-	global g_cdfMeanE2ERaw_BGTI
-	g_cdfMeanE2ERaw_BGTI = []
-	global g_cdfMaxE2ERaw_BGTI
-	g_cdfMaxE2ERaw_BGTI = []
+	g_dicInputData = readFile.collectData(filePath)
 
-	global g_cdfPDR_BGTI
-	g_cdfPDR_BGTI = []
-	global g_cdfMeanE2E_BGTI
-	g_cdfMeanE2E_BGTI = []
-	global g_cdfMaxE2E_BGTI
-	g_cdfMaxE2E_BGTI = []
+	if DEBUG:
+		pprint.pprint(g_dicInputData)
+	# collectData(directory)
 
+	global g_dicMeanData
+	g_dicMeanData = {}
 
-	if directory[len(directory)-1] != '/':
-		directory = directory + '/'
+	meanCompute(g_dicInputData, g_dicMeanData)
 
-	print("Scan:", directory)
-	collectData(directory)
+	global g_cdfData
+	g_cdfData = []
+
 	processData()
+
+	pprint.pprint(g_dicMeanData)
+
+	schemeName = "ibcs"
 
 	if schemeName:
 		saveData(prefix1=schemeName, savePath=outputDir)

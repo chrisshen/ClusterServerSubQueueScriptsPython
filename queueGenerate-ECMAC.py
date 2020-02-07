@@ -44,6 +44,11 @@ def optionsSet():
 							dest="parameter",
 							default="density", # BgPktInterval, PktInterval
 							help="Vary parameter for simulation.")
+	optParser.add_option("-t", "--TwoWay",
+							dest="twoway",
+							default=False,
+							# action="store_false", # True: store_true, False: store_false
+							help="Twoway scenario")
 	options, args = optParser.parse_args()
 	return options
 
@@ -80,6 +85,8 @@ if __name__ == "__main__":
 	prefix = options.prefix
 	name = options.name
 	parameterName = options.parameter
+	twoway = options.twoway
+	print("twoway", twoway);
 
 	s1 = "#!/bin/bash"
 	s2 = "#$ -cwd"
@@ -88,9 +95,11 @@ if __name__ == "__main__":
 
 	savePath = './output/'
 
-	cmd1 = "/home/chris/usr/HCMAC/veins-veins-4.6-EDCA/run -u Cmdenv -f omnetpp_express.ini";
-
+	# cmd1 = "/home/chris/usr/HCMAC/veins-veins-4.6-EDCA/run -u Cmdenv -f omnetpp_express.ini";
+	# cmd1 = "/home/chris/usr/HCMAC/veins_DMMAC/run -u Cmdenv -f omnetpp_express.ini";
+	cmd1 = "/home/chris/usr/HCMAC/ECMAC-baseline-DMMAC-UFC/run -u Cmdenv -f omnetpp_express.ini";
  	# cmd1 = "/home/chris/usr/HCMAC/veins_HCMAC/run -u Cmdenv -f omnetpp_express_SCMAC.ini";
+ 	# cmd1 = "/home/chris/usr/ECMAC-Lte-master/simulte-mec-test/run -u Cmdenv -f omnetpp_TwoCell.ini";
 
 	# seed: 0-9
 	seed = 10
@@ -102,6 +111,9 @@ if __name__ == "__main__":
 
 	if parameterName == 'density':
 		config = 'Density-'
+
+		if twoway:
+			config = 'Density2w-'
 		# density
 		parameter = ['05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60']
 	elif parameterName == 'BgPktInterval':
@@ -120,7 +132,10 @@ if __name__ == "__main__":
 			# create shell script for each parameter
 
 			if parameterName == 'density':
-				n1 = fullFileName+'-d-'+str(a)+'-s-'+str(s)+'.sh'
+				if twoway:
+					n1 = fullFileName+'-d-'+str(a)+'-s-'+str(s)+'-tw'+'.sh'
+				else:
+					n1 = fullFileName+'-d-'+str(a)+'-s-'+str(s)+'.sh'
 			elif parameterName == 'BgPktInterval':
 				n1 = fullFileName+'-BGTI-'+str(a)+'-s-'+str(s)+'.sh'
 			elif parameterName == 'PktInterval':
@@ -139,8 +154,12 @@ if __name__ == "__main__":
 
 			# create total submission script
 			if parameterName == 'density':
-				n2 = fileName+'-d-'+str(a)+'-s-'+str(s)+'.sh'
-				f = open(fullFileName+'-density'+'.sh', 'a+')
+				if twoway:
+					n2 = fileName+'-d-'+str(a)+'-s-'+str(s)+'-tw'+'.sh'
+					f = open(fullFileName+'-density'+'-tw'+'.sh', 'a+')
+				else:
+					n2 = fileName+'-d-'+str(a)+'-s-'+str(s)+'.sh'
+					f = open(fullFileName+'-density'+'.sh', 'a+')
 			elif parameterName == 'BgPktInterval':
 				n2 = fileName+'-BGTI-'+str(a)+'-s-'+str(s)+'.sh'
 				f = open(fullFileName+'-BGTI'+'.sh', 'a+')
