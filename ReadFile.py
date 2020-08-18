@@ -69,3 +69,28 @@ class ReadFile:
 		else:
 			if valEle:
 				targetDic[key]=[valEle]
+
+	def readDire(self, fileDir):
+		"""scan the directory to read every data point"""
+		# for root, dirs, files in os.walk(directory):
+		# 	for filename in files:
+		# 		# e.g., EDCA-s1Persis-BGTI-0.010-s-9.csv
+		# 		fnSplitList=filename.split('-')
+
+		tDic = {}
+		with open(fileDir, 'r') as csvf:
+			print('.', end="")
+
+			csvreader=csv.reader(csvf)
+			for indRow, row in enumerate(csvreader):
+				print(indRow, row)
+
+				# splitedRow = row.split(', ')
+				
+				for index, value in enumerate(row, start=1):
+					self.readData(xAxis=index,
+									yAxisDataPoint=value.strip(),
+									targetDic=tDic)
+					if DEBUG:
+						print(index, value.strip())
+		return tDic
