@@ -76,21 +76,102 @@ class ReadFile:
 		# 	for filename in files:
 		# 		# e.g., EDCA-s1Persis-BGTI-0.010-s-9.csv
 		# 		fnSplitList=filename.split('-')
-
 		tDic = {}
-		with open(fileDir, 'r') as csvf:
-			print('.', end="")
 
-			csvreader=csv.reader(csvf)
-			for indRow, row in enumerate(csvreader):
-				print(indRow, row)
+		# rss
+		for root, dirs, files in os.walk(fileDir):
+			for folder in dirs:
+				for root2, dirs2, files2 in os.walk(root+folder):
+					currPath=root2+'/'
+					# print(currPath)
+					# for folder in dirs:
+					for filename in files2:
+						temp = []
+						with open(currPath+filename, 'r') as csvf:
+							print('.', end="")
 
-				# splitedRow = row.split(', ')
-				
-				for index, value in enumerate(row, start=1):
-					self.readData(xAxis=index,
-									yAxisDataPoint=value.strip(),
-									targetDic=tDic)
-					if DEBUG:
-						print(index, value.strip())
+							csvreader=csv.reader(csvf)
+							for indRow, row in enumerate(csvreader):
+								# print(indRow, row)
+								temp.append(row)
+
+						for ele in temp:
+							if ele[0] == 'sigma':
+								lastEle = temp[-1]
+								# print(lastEle)
+								if float(ele[1]) == 5.0:
+									if tDic.has_key(float(ele[1])):
+										tDic[float(ele[1])].append(float(lastEle[3]))
+									else:
+										tDic[float(ele[1])]=[float(lastEle[3])]
+									break
 		return tDic
+
+	def readDataIPStoDict(self, key, yAxisDataPoint, targetDic):
+		''' Save data from each file, save it to the targetDic
+
+		args:
+			xAxis (str, int): x axis point
+			yAxisDataPoint (float): raw data point
+		return:
+			targetDic (dict): 
+		'''
+		# key = xAxis
+		valEle = 0
+		# if yAxisDataPoint:
+		# 	valEle = float(yAxisDataPoint)
+		if key == 1:
+			if targetDic.has_key(yAxisDataPoint):
+				if valEle:
+					targetDic[key].append(valEle)
+			else:
+				if valEle:
+					targetDic[key]=[valEle]
+
+	def saveData(self, prefix1, ending, savePath, dataToSave):
+		prefix0 = 'plotData-'
+		# prefix1 = scheme name
+		if savePath[len(savePath)-1] != '/':
+			savePath = savePath + '/'
+		
+		filename = ''
+
+		if dataToSave:
+			# if g_dicMeanData.has_key('filename'):
+			filename = prefix0+prefix1
+			filename = savePath+filename+'-'+ending
+			self.saveDataToFile(filename, dataToSave)
+
+	def saveDataToFile(self, filename, inputDicData):
+
+		inputDataKeySorted = sorted(inputDicData.keys())
+
+		print(filename)
+		with open(filename, 'w') as f:
+			for key in inputDataKeySorted:
+				value = inputDicData[key]
+				length = len(value)
+				if length == 2:
+					# key: x point, value[0]: y point, value[1]: error bar
+					f.write(str(key)+' '+str(value[0])+' '+str(value[1])+'\n')
+				elif length == 1:
+					# key: x point, value[0]: y point
+					f.write(str(key)+' '+str(value[0])+'\n')
+
+	def saveCDFDataToFile(self, prefix1, ending, savePath, dataToSave):
+		prefix0 = 'plotData-'
+		# prefix1 = scheme name
+		if savePath[len(savePath)-1] != '/':
+			savePath = savePath + '/'
+		
+		filename = ''
+
+		if dataToSave:
+			# if g_dicMeanData.has_key('filename'):
+			filename = prefix0+prefix1
+			filename = savePath+filename+'-'+ending+'-cdf'
+			
+			with open(filename, 'w') as f:
+				for cdf in dataToSave:
+					# cdf[0]: x point; cdf[1]: y point
+					f.write(str(cdf[0])+' '+str(cdf[1])+'\n')

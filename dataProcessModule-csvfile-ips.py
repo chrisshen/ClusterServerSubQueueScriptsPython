@@ -87,15 +87,11 @@ def optionsSet():
 						help="mode for simulation [default: %default] [0:Dijkstra, 1:CTR, 2:SAINT, 3:SAINT+CTR, 4:Actuated, 5:SAINT+Actuated, 6:Dijkstra+CTR, 7:Dijkstra+Actuated, 8:StaticTL]"
 						)
 
-	# CTR mode
-	# 0: compatible mode, compatible lanes pass
-	# 1: maximum mode, maximum lanes pass
-	# 2: combimed mode of 0 and 1
-	# 3: original CTR in the 2013 paper, group CTT comparison
-	optParser.add_option("--CTRMode",
-						dest="CTRMode",
-						type="int",
-						default=2
+	optParser.add_option("--para",
+						type=str,
+						dest="para",
+						default="sigma",
+						help="varible for this data set"
 						)
 
 	options, args = optParser.parse_args()
@@ -368,7 +364,7 @@ if __name__ == "__main__":
 	options = optionsSet()
 	filePath = options.directory
 	outputDir = options.outputDir
-
+	variable = options.para
 	# global xaxis;
 	# xaxis = options.xaxis
 
@@ -384,28 +380,34 @@ if __name__ == "__main__":
 	readFile = ReadFile()
 	statComp = StatisticComp()
 
-	g_dicInputData = readFile.collectData(filePath)
+	g_dicInputData = readFile.readDire(filePath)
 
 	if DEBUG:
 		pprint.pprint(g_dicInputData)
+		# print(len(g_dicInputData['5']))
 	# collectData(directory)
+
+	# sys.exit()
 
 	global g_dicMeanData
 	g_dicMeanData = {}
 
-	meanCompute(g_dicInputData, g_dicMeanData)
+	statComp.meanCompute(g_dicInputData, g_dicMeanData)
+
+	# pprint.pprint(g_dicInputData)
 
 	global g_cdfData
 	g_cdfData = []
 
-	processData()
+	statComp.outData(g_dicInputData, g_dicMeanData, g_cdfData)
 
 	pprint.pprint(g_dicMeanData)
-
-	schemeName = "ibcs"
+	pprint.pprint(g_cdfData)
+	schemeName = "ips"
 
 	if schemeName:
-		saveData(prefix1=schemeName, savePath=outputDir)
+		readFile.saveData(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicMeanData)
+		readFile.saveCDFDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_cdfData)
 	else:
 		exit("schemeName is empty!")
 
