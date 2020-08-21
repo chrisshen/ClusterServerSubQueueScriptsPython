@@ -11,4 +11,11 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 
 class PlotBase():
-    pass
+    def drawLine(self):
+        pass
+
+    def drawBoxplot(self):
+        pass
+
+    def drawCDF(self):
+        pass
