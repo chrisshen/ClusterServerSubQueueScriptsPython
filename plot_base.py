@@ -26,8 +26,35 @@ class PlotBase():
 		plt.show()
 		fig.savefig(f'/home/chris/test-d-{labelText}.eps')
 
-	def drawBoxplot(self):
-		pass
+	def drawMultiLine(self, x, y, errbar, labelText):
+		# ax = plt.axes()
+		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
+
+		for ind in range(len(x)):
+			ax.errorbar(x[ind], y[ind], yerr=errbar[ind], capsize=2, label=labelText[ind], linewidth=1, markersize=8)
+		
+		# ax.set_xticks(ticks=x)
+		ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
+		ax.set_ylabel('Localization Error (m)', size=15)
+		# ax.set_title('')
+		ax.legend(loc='best')
+		
+		fig.tight_layout()
+		plt.show()
+		fig.savefig(f'/home/chris/multiline-d-{labelText}.eps')
+
+	def drawBoxplot(self, x, y, labelText):
+		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
+		ax.set_title('Basic Plot')
+		# ax.boxplot(data)
+
+		ax.set_xticks(ticks=x)		
+		ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
+		ax.set_ylabel('Localization Error (m)', size=15)
+		ax.legend(loc='best', fontsize=15)
+		fig.tight_layout()
+		plt.show()
+		fig.savefig(f'/home/chris/boxplot-d-{labelText}.eps')
 
 	def drawCDF(self, x, y, labelText):
 		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
@@ -82,6 +109,29 @@ class PlotBase():
 				errbar.append(float(eleList[2]))
 				# print(x, y, errbar)
 		return x, y, errbar
+	
+	def extractMultiData(self, filename):
+		x = []
+		y = []
+		errbar = []
+		for root, dirs, files in os.walk(folder):
+			for file in files:
+				with open(root+file, 'r') as f:
+					# data=f.readlines()
+					data = f.read().splitlines()
+					xEle = []
+					yEle = []
+					eEle = []
+					for ele in data:
+						eleList = ele.split(' ')
+						xEle.append(float(eleList[0]))
+						yEle.append(float(eleList[1]))
+						eEle.append(float(eleList[2]))
+					x.append(xEle)
+					y.append(yEle)
+					errbar.append(eEle)
+				# print(x, y, errbar)
+		return x, y, errbar
 
 	def extractCDFData(self, filename):
 		x = []
@@ -134,10 +184,15 @@ if __name__ == "__main__":
 	print(labelText)
 	draw = PlotBase()
 	# x,y,errbar=draw.extractData(filename)
+	x,y,errbar=draw.extractMultiData(folder)
+
 	# x, y = draw.extractCDFData(filename)
-	x, y = draw.extractMultiCDFData(folder)
-	# print(x[1], y[1])
+	# x, y = draw.extractMultiCDFData(folder)
+
+	print(x[1], y[1])
 	# sys.exit()
+
 	# draw.drawLine(x, y, errbar, labelText)
-	draw.drawMultiCDF(x, y, labelText)
+	draw.drawMultiLine(x, y, errbar, labelText)	
+	# draw.drawMultiCDF(x, y, labelText)
 	# print(x, y, errbar)
