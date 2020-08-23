@@ -114,8 +114,11 @@ class PlotBase():
 		x = []
 		y = []
 		errbar = []
+		label=[]
 		for root, dirs, files in os.walk(folder):
 			for file in files:
+				splFile=file.split('-')
+				label.append(splFile[-2]+'-'+splFile[-1])
 				with open(root+file, 'r') as f:
 					# data=f.readlines()
 					data = f.read().splitlines()
@@ -131,7 +134,7 @@ class PlotBase():
 					y.append(yEle)
 					errbar.append(eEle)
 				# print(x, y, errbar)
-		return x, y, errbar
+		return x, y, errbar, label
 
 	def extractCDFData(self, filename):
 		x = []
@@ -149,8 +152,11 @@ class PlotBase():
 	def extractMultiCDFData(self, folder):
 		x = []
 		y = []
+		label = []
 		for root, dirs, files in os.walk(folder):
 			for file in files:
+				splFile=file.split('-')
+				label.append(splFil[-2]+'-'+splFile[-1])				
 				with open(root+file, 'r') as f:
 					# data=f.readlines()
 					data = f.read().splitlines()
@@ -163,7 +169,7 @@ class PlotBase():
 					x.append(xEle)
 					y.append(yEle)
 						# print(x, y, errbar)
-		return x, y
+		return x, y, label
 
 def parseArgments():
 	parser = argparse.ArgumentParser(description='Specify data to draw.')
@@ -184,10 +190,10 @@ if __name__ == "__main__":
 	print(labelText)
 	draw = PlotBase()
 	# x,y,errbar=draw.extractData(filename)
-	x,y,errbar=draw.extractMultiData(folder)
+	x, y, errbar, labelText=draw.extractMultiData(folder)
 
 	# x, y = draw.extractCDFData(filename)
-	# x, y = draw.extractMultiCDFData(folder)
+	# x, y, labelText = draw.extractMultiCDFData(folder)
 
 	print(x[1], y[1])
 	# sys.exit()
