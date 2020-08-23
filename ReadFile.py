@@ -1,12 +1,12 @@
-#!/home/chris/anaconda2/bin/python2
+#!/home/chris/anaconda3/bin/python3
 # @file    readFile.py
 # @author  Chris Shen
 # @date    2020-02-07
 # @version $Id$
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
+# from __future__ import absolute_import
+# from __future__ import print_function
+# from __future__ import division
 
 import os
 import sys
@@ -100,11 +100,39 @@ class ReadFile:
 								lastEle = temp[-1]
 								# print(lastEle)
 								if float(ele[1]) == 5.0:
-									if tDic.has_key(float(ele[1])):
+									if float(ele[1]) in tDic:
 										tDic[float(ele[1])].append(float(lastEle[3]))
 									else:
 										tDic[float(ele[1])]=[float(lastEle[3])]
 									break
+		return tDic
+
+	def readDireTimeseries(self, fileDir):
+		"""scan the directory to read every data point"""
+		# for root, dirs, files in os.walk(directory):
+		# 	for filename in files:
+		# 		# e.g., EDCA-s1Persis-BGTI-0.010-s-9.csv
+		# 		fnSplitList=filename.split('-')
+		tDic = {}
+		for root, dirs, files in os.walk(fileDir):
+			for filename in files:
+				temp = []
+				with open(root+filename, 'r') as csvf:
+					print('.', end="")
+
+					csvreader=csv.reader(csvf)
+					for indRow, row in enumerate(csvreader):
+						# print(indRow, row)
+						temp.append(row)
+				# print(temp)
+				timeStep = 1.0
+				for ele in temp:
+					if len(ele) > 2 and ele[2] == 'error':
+						if timeStep in tDic:
+							tDic[timeStep].append(float(ele[3]))
+						else:
+							tDic[timeStep]=[float(ele[3])]
+						timeStep += 1
 		return tDic
 
 	def readDataIPStoDict(self, key, yAxisDataPoint, targetDic):

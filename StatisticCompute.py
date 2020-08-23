@@ -1,12 +1,12 @@
-#!/home/chris/anaconda2/bin/python2
+#!/home/chris/anaconda3/bin/python3
 # @file    StatisticCompute.py
 # @author  Chris Shen
 # @date    2020-02-07
 # @version $Id$
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
+# from __future__ import absolute_import
+# from __future__ import print_function
+# from __future__ import division
 
 import os
 import sys
@@ -68,7 +68,7 @@ class StatisticComp:
 		return:
 
 		'''	
-		for key, valList in inputDic.viewitems():
+		for key, valList in inputDic.items():
 			if not isinstance(key, str):
 				retDic[key] = [sum(valList)/len(valList)]
 
@@ -82,7 +82,7 @@ class StatisticComp:
 		'''
 		# print(inDic)
 		# print(inDicMean)
-		for key, valList in inDic.viewitems():
+		for key, valList in inDic.items():
 			if not isinstance(key, str):
 				sum_var = 0.0
 				for value in valList:
@@ -103,7 +103,7 @@ class StatisticComp:
 			inVari (dict): input variance data
 			retDic (dict): return confience interval data
 		'''	
-		for key, val in inVari.viewitems():
+		for key, val in inVari.items():
 			# student t dis., T(10-1, 90%) = 1.833, T(6-1, 90%) = 2.015
 			stuT_9 = 1.833
 			stuT_5 = 2.015
@@ -118,7 +118,7 @@ class StatisticComp:
 			inVari (dict): input variance data
 			retDic (dict): return confience interval data
 		'''	
-		for key, val in inDicMean.viewitems():
+		for key, val in inDicMean.items():
 			if not isinstance(key, str):
 				inDicMean[key].append(inDicConf[key])
 

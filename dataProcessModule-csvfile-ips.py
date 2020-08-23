@@ -1,4 +1,4 @@
-#!/home/chris/anaconda2/bin/python2
+#!/home/chris/anaconda3/bin/python3
 #
 # Data collection and processing.
 # Main tasks:
@@ -14,9 +14,9 @@
 # @date    2018-08-15
 # @version $Id$
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import division
+# from __future__ import absolute_import
+# from __future__ import print_function
+# from __future__ import division
 
 import os
 import sys
@@ -320,46 +320,6 @@ def saveData(prefix1, savePath):
 		filename = savePath+filename+'-output'
 		saveDataToFile(filename, g_dicMeanData)
 
-
-def collectData(directory):
-
-	mode = ''
-	global schemeName
-
-
-	meanCompute(inputDic=g_dicPDRRaw_BGTI, 
-				retDic=g_dicMeanPDR_BGTI)
-	meanCompute(inputDic=g_dicMaxE2ERaw_BGTI, 
-				retDic=g_dicMeanMaxE2E_BGTI)
-	meanCompute(inputDic=g_dicMeanE2ERaw_BGTI, 
-				retDic=g_dicMeanE2E_BGTI)
-
-	writeFilename(peType='MeanPDR', mode=mode, 
-				targetDic=g_dicMeanPDR_BGTI)
-	writeFilename(peType='MeanMaxE2E', mode=mode, 
-			targetDic=g_dicMeanMaxE2E_BGTI)
-	writeFilename(peType='MeanE2E', mode=mode, 
-			targetDic=g_dicMeanE2E_BGTI)
-
-	writeFilename(peType='cdfPDR', mode=mode, 
-				targetDic=g_dicPDRRaw_BGTI)
-	writeFilename(peType='cdfMaxE2E', mode=mode, 
-			targetDic=g_dicMaxE2ERaw_BGTI)
-	writeFilename(peType='cdfMeanE2E', mode=mode, 
-			targetDic=g_dicMeanE2ERaw_BGTI)
-
-	pprint.pprint(g_dicPDRRaw_BGTI)
-	pprint.pprint(g_dicMaxE2ERaw_BGTI)
-	pprint.pprint(g_dicMeanE2ERaw_BGTI)
-
-	pprint.pprint(g_dicMeanPDR_BGTI)
-	pprint.pprint(g_dicMeanMaxE2E_BGTI)
-	pprint.pprint(g_dicMeanE2E_BGTI)
-
-	pprint.pprint(g_cdfPDR_BGTI)
-	pprint.pprint(g_cdfMeanE2E_BGTI)
-	pprint.pprint(g_cdfMaxE2E_BGTI)
-
 if __name__ == "__main__":
 	options = optionsSet()
 	filePath = options.directory
@@ -380,10 +340,11 @@ if __name__ == "__main__":
 	readFile = ReadFile()
 	statComp = StatisticComp()
 
-	g_dicInputData = readFile.readDire(filePath)
+	g_dicInputData = readFile.readDireTimeseries(filePath)
 
-	if DEBUG:
-		pprint.pprint(g_dicInputData)
+	# print(g_dicInputData)
+	# if DEBUG:
+	# 	pprint.pprint(g_dicInputData)
 		# print(len(g_dicInputData['5']))
 	# collectData(directory)
 
@@ -394,7 +355,8 @@ if __name__ == "__main__":
 
 	statComp.meanCompute(g_dicInputData, g_dicMeanData)
 
-	# pprint.pprint(g_dicInputData)
+	pprint.pprint(g_dicMeanData)
+	# sys.exit()
 
 	global g_cdfData
 	g_cdfData = []
@@ -402,12 +364,12 @@ if __name__ == "__main__":
 	statComp.outData(g_dicInputData, g_dicMeanData, g_cdfData)
 
 	pprint.pprint(g_dicMeanData)
-	pprint.pprint(g_cdfData)
-	schemeName = "ips"
+	# pprint.pprint(g_cdfData)
+	schemeName = "ips-timestep"
 
 	if schemeName:
 		readFile.saveData(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicMeanData)
-		readFile.saveCDFDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_cdfData)
+		# readFile.saveCDFDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_cdfData)
 	else:
 		exit("schemeName is empty!")
 
