@@ -340,9 +340,10 @@ if __name__ == "__main__":
 	readFile = ReadFile()
 	statComp = StatisticComp()
 
-	g_dicInputData = readFile.readDireTimeseries(filePath)
+	g_dicInputData = readFile.readDire(filePath)
+	# g_dicInputData = readFile.readDireTimeseries(filePath)
 
-	# print(g_dicInputData)
+	print(g_dicInputData)
 	# if DEBUG:
 	# 	pprint.pprint(g_dicInputData)
 		# print(len(g_dicInputData['5']))
@@ -365,11 +366,12 @@ if __name__ == "__main__":
 
 	pprint.pprint(g_dicMeanData)
 	# pprint.pprint(g_cdfData)
-	schemeName = "ips-timestep"
+	schemeName = "ips-box"
 
 	if schemeName:
-		readFile.saveData(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicMeanData)
+		# readFile.saveData(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicMeanData)
 		# readFile.saveCDFDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_cdfData)
+		readFile.saveBoxDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicInputData)
 	else:
 		exit("schemeName is empty!")
 

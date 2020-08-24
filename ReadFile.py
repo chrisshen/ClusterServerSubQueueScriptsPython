@@ -99,6 +99,7 @@ class ReadFile:
 							if ele[0] == 'sigma':
 								lastEle = temp[-1]
 								# print(lastEle)
+								# alter here to get different data
 								if float(ele[1]) == 5.0:
 									if float(ele[1]) in tDic:
 										tDic[float(ele[1])].append(float(lastEle[3]))
@@ -203,3 +204,23 @@ class ReadFile:
 				for cdf in dataToSave:
 					# cdf[0]: x point; cdf[1]: y point
 					f.write(str(cdf[0])+' '+str(cdf[1])+'\n')
+
+	def saveBoxDataToFile(self, prefix1, ending, savePath, dataToSave):
+		prefix0 = 'plotData-'
+		# prefix1 = scheme name
+		if savePath[len(savePath)-1] != '/':
+			savePath = savePath + '/'
+		
+		filename = ''
+
+		if dataToSave:
+			# if g_dicMeanData.has_key('filename'):
+			filename = prefix0+prefix1
+			filename = savePath+filename+'-'+ending
+			
+			with open(filename, 'w') as f:
+				for key, value in dataToSave.items():
+					# cdf[0]: x point; cdf[1]: y point
+					for ele in value:
+						f.write(str(ele)+' ')
+					f.write('\n')
