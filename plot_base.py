@@ -6,6 +6,7 @@ import math
 import time
 import argparse
 # import statistics
+import pprint
 
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
@@ -230,6 +231,19 @@ class PlotBase():
 						y.append(yEle)
 		return x, y, label
 
+	def sortData(self, x=None, y=None, label=None):
+		# print(label, y)
+		# pprint.pprint(y)
+		labelY=zip(label, y)
+		sLabelY=sorted(labelY)
+		# print(sLabelY)
+		# y.sort(key=str.lower)
+		# print(y)
+		ret=[ele2 for ele1, ele2 in sLabelY]
+		label=[ele1 for ele1, ele2 in sLabelY]
+		# print(label, y)
+		return ret, label
+
 def parseArgments():
 	parser = argparse.ArgumentParser(description='Specify data to draw.')
 	parser.add_argument('--dataFile', type=str, nargs=1, default=[''], 
@@ -248,20 +262,23 @@ if __name__ == "__main__":
 	folder = para.dataFolder[0]
 	print(labelText)
 	draw = PlotBase()
+
 	# x,y,errbar,labelText=draw.extractData(filename)
-	# x, y, errbar, labelText=draw.extractMultiData(folder)
+	# draw.drawLine(x, y, errbar, labelText)
+
+	x, y, errbar, labelText=draw.extractMultiData(folder)
 
 	# x, y, labelText = draw.extractCDFData(filename)
 	# x, y, labelText = draw.extractMultiCDFData(folder)
-
-	# x, y = draw.extractBoxplotData(filename)
-	x, y, labelText = draw.extractMultiBoxplotData(folder)
-
-	print(y, labelText)
-	# sys.exit()
-
-	# draw.drawLine(x, y, errbar, labelText)
-	# draw.drawMultiLine(x, y, errbar, labelText)	
 	# draw.drawMultiCDF(x, y, labelText)
-	draw.drawBoxplot(x=[], y=y, labelText=labelText)
+	y, labelText = draw.sortData(x, y, labelText)
+	
+	# x, y = draw.extractBoxplotData(filename)
+	# x, y, labelText = draw.extractMultiBoxplotData(folder)
+	# draw.drawBoxplot(x=[], y=y, labelText=labelText)
+
+	# print(y, labelText)
+	# sys.exit()
+	
+	draw.drawMultiLine(x, y, errbar, labelText)	
 	# print(x, y, errbar)
