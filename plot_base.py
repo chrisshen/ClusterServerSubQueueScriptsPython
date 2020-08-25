@@ -21,7 +21,7 @@ class PlotBase():
 		ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
 		ax.set_ylabel('Localization Error (m)', size=15)
 		# ax.set_title('')
-		ax.legend(loc='best')
+		ax.legend(loc='best', edgecolor='inherit')
 		
 		fig.tight_layout()
 		plt.show()
@@ -32,7 +32,7 @@ class PlotBase():
 		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
 
 		for ind in range(len(x)):
-			ax.errorbar(x[ind], y[ind], yerr=errbar[ind], capsize=2, label=labelText[ind], linewidth=1, markersize=8)
+			ax.errorbar(x[ind], y[ind], yerr=errbar[ind], capsize=0, label=labelText[ind], linewidth=2, markersize=8)
 		
 		ax.set_xlim(0, x[0][-1]+1)
 		# ax.set_ylim(0.0, 1.01)
@@ -40,7 +40,7 @@ class PlotBase():
 		ax.set_xlabel('Time Step', size=15)
 		ax.set_ylabel('Localization Error (m)', size=15)
 		# ax.set_title('')
-		ax.legend(loc='best', fontsize=15)
+		ax.legend(loc='best', fontsize=15, edgecolor='inherit')
 		
 		fig.tight_layout()
 		plt.show()
@@ -68,7 +68,7 @@ class PlotBase():
 		ax.set_xlabel('Localization Error (m)', size=15)
 		ax.set_ylabel('CDF', size=15)
 		
-		ax.legend(loc='best', fontsize=15)
+		ax.legend(loc='best', fontsize=15, edgecolor='inherit')
 		fig.tight_layout()
 		plt.show()
 		fig.savefig(f'/home/chris/Figures/scdf-{labelText}.eps')
@@ -79,13 +79,13 @@ class PlotBase():
 		ax.axhline(0.8, c='black', ls='--', lw=2)
 		x80 = []
 		for ind in range(len(x)):
-			ax.plot(x[ind], y[ind], label=labelText[ind], linewidth=3)
+			ax.plot(x[ind], y[ind], label=labelText[ind], linewidth=5)
 			for ind2 in range(len(x[ind])):
 				if round(y[ind][ind2], 2) == 0.80:
-					print(round(y[ind][ind2], 2))
+					# print(round(y[ind][ind2], 2))
 					x80.append(x[ind][ind2])
 					break
-		print(x80)
+		# print(x80)
 		for ele in x80:
 			ax.axvline(ele, ymax=0.79, c='black', ls='--', lw=2)
 
@@ -94,7 +94,7 @@ class PlotBase():
 		ax.set_xlabel('Localization Error (m)', size=15)
 		ax.set_ylabel('CDF', size=15)
 
-		ax.legend(loc='best', fontsize=15)
+		ax.legend(loc='best', fontsize=15, edgecolor='inherit')
 		fig.tight_layout()
 		plt.show()
 		fig.savefig(f'/home/chris/Figures/mcdf-{labelText}.eps')
@@ -138,6 +138,9 @@ class PlotBase():
 					y.append(yEle)
 					errbar.append(eEle)
 				# print(x, y, errbar)
+		# print(label)
+		x, y, errbar,label=self.sortData(x, y, errbar, label)
+		# print(x, y, errbar, label)
 		return x, y, errbar, label
 
 	def extractCDFData(self, filename):
@@ -176,7 +179,7 @@ class PlotBase():
 					x.append(xEle)
 					y.append(yEle)
 						# print(x, y, errbar)
-		
+		x, y, label = self.sortData(x, y, label)
 		return x, y, label
 
 	def extractBoxplotData(self, filename):
@@ -201,6 +204,7 @@ class PlotBase():
 				# errbar.append(float(eleList[2]))
 				# print(x, y, errbar)
 				y.append(yEle)
+		# self.sortData(x, y, labelText)
 		return x, y
 
 	def extractMultiBoxplotData(self, folder):
@@ -229,20 +233,19 @@ class PlotBase():
 						# errbar.append(float(eleList[2]))
 						# print(x, y, errbar)
 						y.append(yEle)
+		x, y, label = self.sortData(x, y, label)
 		return x, y, label
 
-	def sortData(self, x=None, y=None, label=None):
+	def sortData(self, x=[], y=[], errorbar=[], label=[]):
 		# print(label, y)
-		# pprint.pprint(y)
-		labelY=zip(label, y)
-		sLabelY=sorted(labelY)
-		# print(sLabelY)
-		# y.sort(key=str.lower)
-		# print(y)
-		ret=[ele2 for ele1, ele2 in sLabelY]
-		label=[ele1 for ele1, ele2 in sLabelY]
-		# print(label, y)
-		return ret, label
+		labelY=zip(label, x, y, errorbar)
+		sDataWLabel=sorted(labelY)
+		# print(sDataWLabel)
+		label = [ele1 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		retX = [ele2 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		retY = [ele3 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		return retX, retY, errbar, label
 
 def parseArgments():
 	parser = argparse.ArgumentParser(description='Specify data to draw.')
@@ -252,6 +255,8 @@ def parseArgments():
 	                    default=[''], help='data folder to collect and draw')
 	parser.add_argument('--labelText', type=str, nargs='*',
 	                    default=[''], help='label for the data shown in legend')
+	parser.add_argument('--type', type=str, nargs='*',
+	                    default=['line'], help='data type for drawn, sline, mline, scdf, mcdf, sboxplot, mboxplot')
 	return parser
 
 if __name__ == "__main__":
@@ -260,25 +265,25 @@ if __name__ == "__main__":
 	filename = para.dataFile[0]
 	labelText = para.labelText
 	folder = para.dataFolder[0]
+	dataType = para.type[0]
+
 	print(labelText)
 	draw = PlotBase()
 
-	# x,y,errbar,labelText=draw.extractData(filename)
-	# draw.drawLine(x, y, errbar, labelText)
-
-	x, y, errbar, labelText=draw.extractMultiData(folder)
-
-	# x, y, labelText = draw.extractCDFData(filename)
-	# x, y, labelText = draw.extractMultiCDFData(folder)
-	# draw.drawMultiCDF(x, y, labelText)
-	y, labelText = draw.sortData(x, y, labelText)
-	
-	# x, y = draw.extractBoxplotData(filename)
-	# x, y, labelText = draw.extractMultiBoxplotData(folder)
-	# draw.drawBoxplot(x=[], y=y, labelText=labelText)
-
-	# print(y, labelText)
-	# sys.exit()
-	
-	draw.drawMultiLine(x, y, errbar, labelText)	
+	if dataType == 'sline':
+		x,y,errbar,labelText=draw.extractData(filename)
+		draw.drawLine(x, y, errbar, labelText)
+	elif dataType == 'mline':
+		x, y, errbar, labelText=draw.extractMultiData(folder)
+		draw.drawMultiLine(x, y, errbar, labelText)
+	elif dataType == 'scdf':
+		x, y, labelText = draw.extractCDFData(filename)
+	elif dataType == 'mcdf':
+		x, y, labelText = draw.extractMultiCDFData(folder)
+		draw.drawMultiCDF(x, y, labelText)
+	elif dataType == 'sboxplot':
+		x, y = draw.extractBoxplotData(filename)
+	elif dataType == 'mboxplot':
+		x, y, labelText = draw.extractMultiBoxplotData(folder)
+		draw.drawBoxplot(x=[], y=y, labelText=labelText)
 	# print(x, y, errbar)
