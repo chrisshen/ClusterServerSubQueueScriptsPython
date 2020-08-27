@@ -366,11 +366,11 @@ if __name__ == "__main__":
 
 	pprint.pprint(g_dicMeanData)
 	# pprint.pprint(g_cdfData)
-	schemeName = "ips-box"
+	schemeName = "ips-ap"
 
 	if schemeName:
 		# readFile.saveData(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicMeanData)
-		# readFile.saveCDFDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_cdfData)
+		readFile.saveCDFDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_cdfData)
 		readFile.saveBoxDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicInputData)
 	else:
 		exit("schemeName is empty!")

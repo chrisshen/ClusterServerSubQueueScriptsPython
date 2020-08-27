@@ -96,17 +96,53 @@ class ReadFile:
 								temp.append(row)
 
 						for ele in temp:
-							if ele[0] == 'sigma':
+							if ele[0] == 'ap':
 								lastEle = temp[-1]
 								# print(lastEle)
 								# alter here to get different data
-								if float(ele[1]) == 5.0:
+								if float(ele[1]) == 6.0:
 									if float(ele[1]) in tDic:
 										tDic[float(ele[1])].append(float(lastEle[3]))
 									else:
 										tDic[float(ele[1])]=[float(lastEle[3])]
 									break
 		return tDic
+
+	def readSDire(self, fileDir):
+		"""scan the directory to read every data point"""
+		# for root, dirs, files in os.walk(directory):
+		# 	for filename in files:
+		# 		# e.g., EDCA-s1Persis-BGTI-0.010-s-9.csv
+		# 		fnSplitList=filename.split('-')
+		tDic = {}
+
+		# rss
+		for root, dirs, files in os.walk(fileDir):
+			# print(currPath)
+			# for folder in dirs:
+			for filename in files2:
+				temp = []
+				with open(root+filename, 'r') as csvf:
+					print('.', end="")
+
+					csvreader=csv.reader(csvf)
+					for indRow, row in enumerate(csvreader):
+						# print(indRow, row)
+						temp.append(row)
+
+				for ele in temp:
+					if ele[0] == 'sigma':
+						lastEle = temp[-1]
+						# print(lastEle)
+						# alter here to get different data
+						if float(ele[1]) == 5.0:
+							if float(ele[1]) in tDic:
+								tDic[float(ele[1])].append(float(lastEle[3]))
+							else:
+								tDic[float(ele[1])]=[float(lastEle[3])]
+							break
+		return tDic
+
 
 	def readDireTimeseries(self, fileDir):
 		"""scan the directory to read every data point"""

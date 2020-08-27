@@ -53,7 +53,7 @@ class PlotBase():
 
 		# ax.set_xlim(0, len(x)+1)
 		# ax.set_xticks(ticks=x)		
-		ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
+		ax.set_xlabel('Number of APs', size=15)
 		ax.set_ylabel('Localization Error (m)', size=15)
 		# ax.legend(loc='best', fontsize=15)
 		fig.tight_layout()
@@ -89,7 +89,7 @@ class PlotBase():
 		for ele in x80:
 			ax.axvline(ele, ymax=0.79, c='black', ls='--', lw=2)
 
-		ax.set_xlim(0.0, x[-1][-1])
+		ax.set_xlim(-0.01, x[-1][-1])
 		ax.set_ylim(0.0, 1.01)
 		ax.set_xlabel('Localization Error (m)', size=15)
 		ax.set_ylabel('CDF', size=15)
@@ -163,6 +163,7 @@ class PlotBase():
 		x = []
 		y = []
 		label = []
+		errbar = []
 		for root, dirs, files in os.walk(folder):
 			for file in files:
 				splFile=file.split('-')
@@ -179,7 +180,7 @@ class PlotBase():
 					x.append(xEle)
 					y.append(yEle)
 						# print(x, y, errbar)
-		x, y, label = self.sortData(x, y, label)
+		x, y, errbar, label = self.sortData(x=x, y=y, label=label)
 		return x, y, label
 
 	def extractBoxplotData(self, filename):
@@ -211,6 +212,7 @@ class PlotBase():
 		x = []
 		y = []
 		label = []
+		errbar = []
 		for root, dirs, files in os.walk(folder):
 			for file in files:
 				splFile=file.split('-')
@@ -233,18 +235,28 @@ class PlotBase():
 						# errbar.append(float(eleList[2]))
 						# print(x, y, errbar)
 						y.append(yEle)
-		x, y, label = self.sortData(x, y, label)
+		x, y, errbar, label = self.sortData(y=y, label=label)
 		return x, y, label
 
 	def sortData(self, x=[], y=[], errorbar=[], label=[]):
-		# print(label, y)
-		labelY=zip(label, x, y, errorbar)
+		# print(label, y, x, errorbar)
+		# labelY=zip(label, x, y, errorbar)
+		labelY=zip(label, y, x)
+
 		sDataWLabel=sorted(labelY)
 		# print(sDataWLabel)
-		label = [ele1 for ele1, ele2, ele3, ele4 in sDataWLabel]
-		retX = [ele2 for ele1, ele2, ele3, ele4 in sDataWLabel]
-		retY = [ele3 for ele1, ele2, ele3, ele4 in sDataWLabel]
-		errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
+
+		label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
+		# retX = []
+		retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
+		retY = [ele2 for ele1, ele2, ele3 in sDataWLabel]
+		errbar = []
+		# errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
+
+		# label = [ele1 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# retX = [ele2 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# retY = [ele3 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
 		return retX, retY, errbar, label
 
 def parseArgments():
