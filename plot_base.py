@@ -11,6 +11,13 @@ import pprint
 import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 
+
+lineType = ['-', '--', ':', (0, (3, 1, 1, 1, 1, 1))]
+
+# lineC = ['blue', 'red', '']
+
+# fillC = ['C0', 'C1', 'C2']
+
 class PlotBase():
 	def drawLine(self, x, y, errbar, labelText):
 		# ax = plt.axes()
@@ -46,6 +53,28 @@ class PlotBase():
 		plt.show()
 		fig.savefig(f'/home/chris/Figures/mline-d-{labelText}.eps')
 
+	def drawMultiLineFill(self, x, y, errbar, labelText):
+		# ax = plt.axes()
+		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
+
+		for ind in range(len(x)):
+			y1=np.array(y[ind])
+			errbar1=np.array(errbar[ind])
+			ax.fill_between(x[ind], y1+errbar1, y1-errbar1, label=labelText[ind], alpha=0.5)
+			ax.plot(x[ind], y[ind], ls='--', linewidth=2, markersize=8, color='gray')			
+		
+		ax.set_xlim(0, x[0][-1]+1)
+		# ax.set_ylim(0.0, 1.01)
+		# ax.set_xticks(ticks=x)
+		ax.set_xlabel('Time Step', size=15)
+		ax.set_ylabel('Localization Error (m)', size=15)
+		# ax.set_title('')
+		ax.legend(loc='best', fontsize=15, edgecolor='inherit')
+		
+		fig.tight_layout()
+		plt.show()
+		fig.savefig(f'/home/chris/Figures/mline-d-{labelText}.eps')
+
 	def drawBoxplot(self, x, y, labelText):
 		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
 		# ax.set_title('Basic Plot')
@@ -53,7 +82,8 @@ class PlotBase():
 
 		# ax.set_xlim(0, len(x)+1)
 		# ax.set_xticks(ticks=x)		
-		ax.set_xlabel('Number of APs', size=15)
+		# ax.set_xlabel('Number of APs', size=15)
+		ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
 		ax.set_ylabel('Localization Error (m)', size=15)
 		# ax.legend(loc='best', fontsize=15)
 		fig.tight_layout()
@@ -79,7 +109,7 @@ class PlotBase():
 		ax.axhline(0.8, c='black', ls='--', lw=2)
 		x80 = []
 		for ind in range(len(x)):
-			ax.plot(x[ind], y[ind], label=labelText[ind], linewidth=5)
+			ax.plot(x[ind], y[ind], label=labelText[ind], linewidth=5, linestyle=lineType[ind])
 			for ind2 in range(len(x[ind])):
 				if round(y[ind][ind2], 2) == 0.80:
 					# print(round(y[ind][ind2], 2))
@@ -94,7 +124,7 @@ class PlotBase():
 		ax.set_xlabel('Localization Error (m)', size=15)
 		ax.set_ylabel('CDF', size=15)
 
-		ax.legend(loc='best', fontsize=15, edgecolor='inherit')
+		ax.legend(loc='best', fontsize=15, edgecolor='inherit', scatterpoints=5)
 		fig.tight_layout()
 		plt.show()
 		fig.savefig(f'/home/chris/Figures/mcdf-{labelText}.eps')
@@ -242,21 +272,29 @@ class PlotBase():
 		# print(label, y, x, errorbar)
 		# labelY=zip(label, x, y, errorbar)
 		labelY=zip(label, y, x)
+		# labelY=zip(label, y)
 
 		sDataWLabel=sorted(labelY)
 		# print(sDataWLabel)
 
-		label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
+		# boxplot
+		# label = [ele1 for ele1, ele2 in sDataWLabel]
+		# retY = [ele2 for ele1, ele2 in sDataWLabel]
 		# retX = []
-		retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
-		retY = [ele2 for ele1, ele2, ele3 in sDataWLabel]
-		errbar = []
-		# errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# errbar = []
 
+		# CDF
+		label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
+		retY = [ele2 for ele1, ele2, ele3 in sDataWLabel]
+		retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
+		errbar = []
+
+		# line
 		# label = [ele1 for ele1, ele2, ele3, ele4 in sDataWLabel]
 		# retX = [ele2 for ele1, ele2, ele3, ele4 in sDataWLabel]
 		# retY = [ele3 for ele1, ele2, ele3, ele4 in sDataWLabel]
 		# errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
+
 		return retX, retY, errbar, label
 
 def parseArgments():
@@ -268,7 +306,7 @@ def parseArgments():
 	parser.add_argument('--labelText', type=str, nargs='*',
 	                    default=[''], help='label for the data shown in legend')
 	parser.add_argument('--type', type=str, nargs='*',
-	                    default=['line'], help='data type for drawn, sline, mline, scdf, mcdf, sboxplot, mboxplot')
+	                    default=['line'], help='data type for drawn, sline, mline, mlinefill, scdf, mcdf, sboxplot, mboxplot')
 	return parser
 
 if __name__ == "__main__":
@@ -288,6 +326,9 @@ if __name__ == "__main__":
 	elif dataType == 'mline':
 		x, y, errbar, labelText=draw.extractMultiData(folder)
 		draw.drawMultiLine(x, y, errbar, labelText)
+	elif dataType == 'mlinefill':
+		x, y, errbar, labelText=draw.extractMultiData(folder)
+		draw.drawMultiLineFill(x, y, errbar, labelText)
 	elif dataType == 'scdf':
 		x, y, labelText = draw.extractCDFData(filename)
 	elif dataType == 'mcdf':
