@@ -270,30 +270,47 @@ class PlotBase():
 
 	def sortData(self, x=[], y=[], errorbar=[], label=[]):
 		# print(label, y, x, errorbar)
+
+		# retX =[]
+		# retY =[]
+		# label=[]
+		# errbar=[]
+
+		# if errorbar and x:
+
 		# labelY=zip(label, x, y, errorbar)
+		# sDataWLabel=sorted(labelY)
+		# # line
+		# label = [ele1 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# retX = [ele2 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# retY = [ele3 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
+
+		# elif x:
+
 		labelY=zip(label, y, x)
-		# labelY=zip(label, y)
-
 		sDataWLabel=sorted(labelY)
-		# print(sDataWLabel)
-
-		# boxplot
-		# label = [ele1 for ele1, ele2 in sDataWLabel]
-		# retY = [ele2 for ele1, ele2 in sDataWLabel]
-		# retX = []
-		# errbar = []
-
 		# CDF
 		label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
 		retY = [ele2 for ele1, ele2, ele3 in sDataWLabel]
 		retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
 		errbar = []
 
-		# line
-		# label = [ele1 for ele1, ele2, ele3, ele4 in sDataWLabel]
-		# retX = [ele2 for ele1, ele2, ele3, ele4 in sDataWLabel]
-		# retY = [ele3 for ele1, ele2, ele3, ele4 in sDataWLabel]
-		# errbar = [ele4 for ele1, ele2, ele3, ele4 in sDataWLabel]
+		# else:
+
+		# # boxplot
+		# labelY=zip(label, y)
+		# sDataWLabel=sorted(labelY)
+		# label = [ele1 for ele1, ele2 in sDataWLabel]
+		# retY = [ele2 for ele1, ele2 in sDataWLabel]
+		# retX = []
+		# errbar = []
+
+		if not retY:
+			print("ERROR: empty retY.")
+			sys.exit()
+		# sDataWLabel=sorted(labelY)
+		# print(sDataWLabel)
 
 		return retX, retY, errbar, label
 
