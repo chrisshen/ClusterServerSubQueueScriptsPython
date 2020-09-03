@@ -96,11 +96,11 @@ class ReadFile:
 								temp.append(row)
 
 						for ele in temp:
-							if ele[0] == 'sigma':
+							if ele[0] == 'ap':
 								lastEle = temp[-1]
 								# print(lastEle)
 								# alter here to get different data
-								if float(ele[1]) == 5.0:
+								if float(ele[1]) == 4.0:
 									if float(ele[1]) in tDic:
 										tDic[float(ele[1])].append(float(lastEle[3]))
 									else:
@@ -120,7 +120,7 @@ class ReadFile:
 		for root, dirs, files in os.walk(fileDir):
 			# print(currPath)
 			# for folder in dirs:
-			for filename in files2:
+			for filename in files:
 				temp = []
 				with open(root+filename, 'r') as csvf:
 					print('.', end="")
@@ -131,11 +131,11 @@ class ReadFile:
 						temp.append(row)
 
 				for ele in temp:
-					if ele[0] == 'sigma':
+					if ele[0] == 'ap':
 						lastEle = temp[-1]
 						# print(lastEle)
 						# alter here to get different data
-						if float(ele[1]) == 5.0:
+						if float(ele[1]) == 6.0:
 							if float(ele[1]) in tDic:
 								tDic[float(ele[1])].append(float(lastEle[3]))
 							else:

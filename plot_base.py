@@ -216,7 +216,11 @@ class PlotBase():
 	def extractBoxplotData(self, filename):
 		x = []
 		y = []
-		# errbar = []
+		label = []
+		errbar = []
+
+		splFile=filename.split('-')
+		label.append(splFile[-2]+'-'+splFile[-1])
 		with open(filename, 'r') as f:
 			# data=f.readlines()
 			print(filename)
@@ -235,8 +239,8 @@ class PlotBase():
 				# errbar.append(float(eleList[2]))
 				# print(x, y, errbar)
 				y.append(yEle)
-		# self.sortData(x, y, labelText)
-		return x, y
+		# x, y, errbar, label = self.sortData(y=y, label=label)
+		return x, y, label
 
 	def extractMultiBoxplotData(self, folder):
 		x = []
@@ -288,23 +292,23 @@ class PlotBase():
 
 		# elif x:
 
-		labelY=zip(label, y, x)
-		sDataWLabel=sorted(labelY)
-		# CDF
-		label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
-		retY = [ele2 for ele1, ele2, ele3 in sDataWLabel]
-		retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
-		errbar = []
+		# labelY=zip(label, y, x)
+		# sDataWLabel=sorted(labelY)
+		# # CDF
+		# label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
+		# retY = [ele2 for ele1, ele2, ele3 in sDataWLabel]
+		# retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
+		# errbar = []
 
 		# else:
 
-		# # boxplot
-		# labelY=zip(label, y)
-		# sDataWLabel=sorted(labelY)
-		# label = [ele1 for ele1, ele2 in sDataWLabel]
-		# retY = [ele2 for ele1, ele2 in sDataWLabel]
-		# retX = []
-		# errbar = []
+		# boxplot
+		labelY=zip(label, y)
+		sDataWLabel=sorted(labelY)
+		label = [ele1 for ele1, ele2 in sDataWLabel]
+		retY = [ele2 for ele1, ele2 in sDataWLabel]
+		retX = []
+		errbar = []
 
 		if not retY:
 			print("ERROR: empty retY.")
@@ -352,7 +356,8 @@ if __name__ == "__main__":
 		x, y, labelText = draw.extractMultiCDFData(folder)
 		draw.drawMultiCDF(x, y, labelText)
 	elif dataType == 'sboxplot':
-		x, y = draw.extractBoxplotData(filename)
+		x, y, labelText = draw.extractBoxplotData(filename)
+		draw.drawBoxplot(x=[], y=y, labelText=labelText)
 	elif dataType == 'mboxplot':
 		x, y, labelText = draw.extractMultiBoxplotData(folder)
 		draw.drawBoxplot(x=[], y=y, labelText=labelText)
