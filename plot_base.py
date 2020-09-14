@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from matplotlib.pyplot import figure
 
 
-lineType = ['-', '--', ':', (0, (3, 1, 1, 1, 1, 1))]
+lineType = ['-', '--', ':', (0, (3, 1, 1, 1, 1, 1)), '-.', 'dotted']
 
 # lineC = ['blue', 'red', '']
 
@@ -79,14 +79,24 @@ class PlotBase():
 		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
 		# ax.set_title('Basic Plot')
 		ax.boxplot(y, labels=labelText, showmeans=True)
+		maxY=max([ele for g1 in y for ele in g1])
 
 		# ax.set_xlim(0, len(x)+1)
-		# ax.set_xticks(ticks=x)		
+		# ax.set_xticks(ticks=x)
+		ax.set_yticks(ticks=range(int(maxY+1)))
+		# ax.set_yticks(ticks=np.linspace(0,int(maxY)+1, 3))
+
 		# ax.set_xlabel('Number of APs', size=15)
-		ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
+		# ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
+		ax.minorticks_on()
+		ax.tick_params(labelsize=15)
+		ax.set_xlabel('Scheme', size=15)		
 		ax.set_ylabel('Localization Error (m)', size=15)
 		# ax.legend(loc='best', fontsize=15)
 		fig.tight_layout()
+		# plt.grid(b=True, axis='y', c='gray', ls='--', which='both')
+		plt.grid(b=True, axis='y', c='gray', ls='--')
+		# plt.yticks(range(1,int(y[-1])))
 		plt.show()
 		fig.savefig(f'/home/chris/Figures/boxplot-d-{labelText}.eps')
 
@@ -96,7 +106,7 @@ class PlotBase():
 		ax.set_xlim(0.0, 5.7)
 		ax.set_ylim(0.0, 1.01)
 		ax.set_xlabel('Localization Error (m)', size=15)
-		ax.set_ylabel('CDF', size=15)
+		ax.set_ylabel('Empirical CDF', size=15)
 		
 		ax.legend(loc='best', fontsize=15, edgecolor='inherit')
 		fig.tight_layout()
@@ -109,7 +119,10 @@ class PlotBase():
 		ax.axhline(0.8, c='black', ls='--', lw=2)
 		x80 = []
 		for ind in range(len(x)):
-			ax.plot(x[ind], y[ind], label=labelText[ind], linewidth=5, linestyle=lineType[ind])
+			ax.plot(x[ind], y[ind], 
+				label=labelText[ind], 
+				linewidth=5, 
+				linestyle=lineType[ind])
 			for ind2 in range(len(x[ind])):
 				if round(y[ind][ind2], 2) == 0.80:
 					# print(round(y[ind][ind2], 2))
@@ -119,11 +132,19 @@ class PlotBase():
 		for ele in x80:
 			ax.axvline(ele, ymax=0.79, c='black', ls='--', lw=2)
 
-		ax.set_xlim(-0.01, x[-1][-1])
-		ax.set_ylim(0.0, 1.01)
-		ax.set_xlabel('Localization Error (m)', size=15)
-		ax.set_ylabel('CDF', size=15)
+		maxX=max([ele for g1 in x for ele in g1])
 
+		ax.set_xlim(-0.01, maxX)
+		ax.set_ylim(0.0, 1.01)
+
+		# ax.set_xticks()
+		ax.set_yticks(ticks=np.linspace(0,1,11))
+
+		ax.minorticks_on()
+
+		ax.set_xlabel('Localization Error (m)', size=15)
+		ax.set_ylabel('Empirical CDF', size=15)
+		ax.tick_params(labelsize=15)
 		ax.legend(loc='best', fontsize=15, edgecolor='inherit', scatterpoints=5)
 		fig.tight_layout()
 		plt.show()
@@ -197,7 +218,9 @@ class PlotBase():
 		for root, dirs, files in os.walk(folder):
 			for file in files:
 				splFile=file.split('-')
-				label.append(splFile[-3]+'-'+splFile[-2])
+				# label.append(splFile[-3]+'-'+splFile[-2])
+				label.append(splFile[-4])
+
 				with open(root+file, 'r') as f:
 					# data=f.readlines()
 					data = f.read().splitlines()
@@ -250,7 +273,8 @@ class PlotBase():
 		for root, dirs, files in os.walk(folder):
 			for file in files:
 				splFile=file.split('-')
-				label.append(splFile[-2]+'-'+splFile[-1])
+				# label.append(splFile[-2]+'-'+splFile[-1])
+				label.append(splFile[-3])
 				with open(root+file, 'r') as f:
 					# data=f.readlines()
 					print(file)
@@ -269,7 +293,9 @@ class PlotBase():
 						# errbar.append(float(eleList[2]))
 						# print(x, y, errbar)
 						y.append(yEle)
+						# print(eleList)
 		x, y, errbar, label = self.sortData(y=y, label=label)
+		# print(label, y)
 		return x, y, label
 
 	def sortData(self, x=[], y=[], errorbar=[], label=[]):
@@ -292,23 +318,23 @@ class PlotBase():
 
 		# elif x:
 
-		# labelY=zip(label, y, x)
-		# sDataWLabel=sorted(labelY)
-		# # CDF
-		# label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
-		# retY = [ele2 for ele1, ele2, ele3 in sDataWLabel]
-		# retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
-		# errbar = []
+		# CDF
+		labelY=zip(label, y, x)
+		sDataWLabel=sorted(labelY)
+		label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
+		retY = [ele2 for esle1, ele2, ele3 in sDataWLabel]
+		retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
+		errbar = []
 
 		# else:
 
 		# boxplot
-		labelY=zip(label, y)
-		sDataWLabel=sorted(labelY)
-		label = [ele1 for ele1, ele2 in sDataWLabel]
-		retY = [ele2 for ele1, ele2 in sDataWLabel]
-		retX = []
-		errbar = []
+		# labelY=zip(label, y)
+		# sDataWLabel=sorted(labelY)
+		# label = [ele1 for ele1, ele2 in sDataWLabel]
+		# retY = [ele2 for ele1, ele2 in sDataWLabel]
+		# retX = []
+		# errbar = []
 
 		if not retY:
 			print("ERROR: empty retY.")

@@ -367,7 +367,7 @@ if __name__ == "__main__":
 
 	pprint.pprint(g_dicMeanData)
 	# pprint.pprint(g_cdfData)
-	schemeName = "oips-ap"
+	schemeName = "ips-ap"
 
 	if schemeName:
 		# readFile.saveData(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicMeanData)

@@ -259,4 +259,4 @@ class ReadFile:
 					# cdf[0]: x point; cdf[1]: y point
 					for ele in value:
 						f.write(str(ele)+' ')
-					f.write('\n')
+					# f.write('\n')
