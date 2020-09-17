@@ -100,7 +100,7 @@ class ReadFile:
 								lastEle = temp[-1]
 								# print(lastEle)
 								# alter here to get different data
-								if float(ele[1]) == 4.0:
+								if float(ele[1]) == 6.0:
 									if float(ele[1]) in tDic:
 										tDic[float(ele[1])].append(float(lastEle[3]))
 									else:
@@ -132,10 +132,12 @@ class ReadFile:
 
 				for ele in temp:
 					if ele[0] == 'ap':
+					# if ele[0] == 'sigma':
+
 						lastEle = temp[-1]
 						# print(lastEle)
 						# alter here to get different data
-						if float(ele[1]) == 6.0:
+						if float(ele[1]) == 2.0:
 							if float(ele[1]) in tDic:
 								tDic[float(ele[1])].append(float(lastEle[3]))
 							else:

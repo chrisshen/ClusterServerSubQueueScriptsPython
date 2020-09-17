@@ -63,6 +63,11 @@ class PlotBase():
 			ax.fill_between(x[ind], y1+errbar1, y1-errbar1, label=labelText[ind], alpha=0.5)
 			ax.plot(x[ind], y[ind], ls='--', linewidth=2, markersize=8, color='gray')			
 		
+		# maxY=max([ele for g1 in y for ele in g1])
+		
+		# ax.set_yticks(ticks=range(int(maxY+1)))
+		
+		ax.tick_params(labelsize=15)
 		ax.set_xlim(0, x[0][-1]+1)
 		# ax.set_ylim(0.0, 1.01)
 		# ax.set_xticks(ticks=x)
@@ -70,10 +75,11 @@ class PlotBase():
 		ax.set_ylabel('Localization Error (m)', size=15)
 		# ax.set_title('')
 		ax.legend(loc='best', fontsize=15, edgecolor='inherit')
+		plt.grid(b=True, axis='y', c='gray', ls='--')
 		
 		fig.tight_layout()
 		plt.show()
-		fig.savefig(f'/home/chris/Figures/mline-d-{labelText}.eps')
+		fig.savefig(f'/home/chris/Figures/mline-d-{labelText}.pdf')
 
 	def drawBoxplot(self, x, y, labelText):
 		fig, ax = plt.subplots(1, 1, figsize=(7, 4))
@@ -87,10 +93,10 @@ class PlotBase():
 		# ax.set_yticks(ticks=np.linspace(0,int(maxY)+1, 3))
 
 		# ax.set_xlabel('Number of APs', size=15)
-		# ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
-		ax.minorticks_on()
+		ax.set_xlabel('Sigma (Gaussian Noise)', size=15)
+		# ax.minorticks_on()
 		ax.tick_params(labelsize=15)
-		ax.set_xlabel('Scheme', size=15)		
+		# ax.set_xlabel('Scheme', size=15)		
 		ax.set_ylabel('Localization Error (m)', size=15)
 		# ax.legend(loc='best', fontsize=15)
 		fig.tight_layout()
@@ -173,7 +179,7 @@ class PlotBase():
 		for root, dirs, files in os.walk(folder):
 			for file in files:
 				splFile=file.split('-')
-				label.append(splFile[-2]+'-'+splFile[-1])
+				label.append(splFile[-2]+'='+splFile[-1])
 				with open(root+file, 'r') as f:
 					# data=f.readlines()
 					data = f.read().splitlines()
@@ -218,8 +224,8 @@ class PlotBase():
 		for root, dirs, files in os.walk(folder):
 			for file in files:
 				splFile=file.split('-')
-				# label.append(splFile[-3]+'-'+splFile[-2])
-				label.append(splFile[-4])
+				label.append(splFile[-3]+'='+splFile[-2])
+				# label.append(splFile[-4])
 
 				with open(root+file, 'r') as f:
 					# data=f.readlines()
@@ -273,8 +279,8 @@ class PlotBase():
 		for root, dirs, files in os.walk(folder):
 			for file in files:
 				splFile=file.split('-')
-				# label.append(splFile[-2]+'-'+splFile[-1])
-				label.append(splFile[-3])
+				label.append(splFile[-2]+'='+splFile[-1])
+				# label.append(splFile[-3])
 				with open(root+file, 'r') as f:
 					# data=f.readlines()
 					print(file)
@@ -319,22 +325,22 @@ class PlotBase():
 		# elif x:
 
 		# CDF
-		labelY=zip(label, y, x)
-		sDataWLabel=sorted(labelY)
-		label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
-		retY = [ele2 for esle1, ele2, ele3 in sDataWLabel]
-		retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
-		errbar = []
+		# labelY=zip(label, y, x)
+		# sDataWLabel=sorted(labelY)
+		# label = [ele1 for ele1, ele2, ele3 in sDataWLabel]
+		# retY = [ele2 for esle1, ele2, ele3 in sDataWLabel]
+		# retX = [ele3 for ele1, ele2, ele3 in sDataWLabel]
+		# errbar = []
 
 		# else:
 
 		# boxplot
-		# labelY=zip(label, y)
-		# sDataWLabel=sorted(labelY)
-		# label = [ele1 for ele1, ele2 in sDataWLabel]
-		# retY = [ele2 for ele1, ele2 in sDataWLabel]
-		# retX = []
-		# errbar = []
+		labelY=zip(label, y)
+		sDataWLabel=sorted(labelY)
+		label = [ele1 for ele1, ele2 in sDataWLabel]
+		retY = [ele2 for ele1, ele2 in sDataWLabel]
+		retX = []
+		errbar = []
 
 		if not retY:
 			print("ERROR: empty retY.")

@@ -370,7 +370,9 @@ if __name__ == "__main__":
 	schemeName = "ips-ap"
 
 	if schemeName:
+		# for time series data
 		# readFile.saveData(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicMeanData)
+		
 		readFile.saveCDFDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_cdfData)
 		readFile.saveBoxDataToFile(prefix1=schemeName, ending=variable,savePath=outputDir, dataToSave=g_dicInputData)
 	else:
